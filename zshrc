@@ -49,7 +49,7 @@ alias pingu="ssh pingu.solvnt.net $*"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(autojump catimg osx brew git github themes perl cpanm sudo colorize command-not-found cp vi-mode)
+plugins=(autojump catimg common-aliases osx brew git themes perl cpanm sudo colorize cp vi-mode tmux web-search)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -86,6 +86,3 @@ else
   unset http_proxy
   unset https_proxy
 fi
-
-source /Volumes/Castle/squee/perl5/perlbrew/etc/bashrc
-
