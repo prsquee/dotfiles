@@ -49,7 +49,7 @@ alias pingu="ssh pingu.solvnt.net $*"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(autojump osx brew git github themes perl cpanm sudo colorize command-not-found cp vi-mode)
+plugins=(autojump catimg osx brew git github themes perl cpanm sudo colorize command-not-found cp vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
