@@ -8,7 +8,7 @@ export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="nicoulaj"
 
 # Example aliases
-# alias zshconfig="mate ~/.zshrc"
+alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias pingu="ssh pingu.solvnt.net $*"
 
@@ -75,14 +75,17 @@ export PATH="/Volumes/Castle/squee/perl5/perlbrew/bin:/Volumes/Castle/squee/perl
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 
-#http_proxy
-#
-if [[ $(scselect | awk '{if ($1 == "*") print $3}') == "(mecon)" ]]; then
-  export http_proxy='http://172.20.16.8:3128'
-  export https_proxy='http://172.20.16.8:3128'
-  /usr/local/bin/git config --global http.proxy $http_proxy
+# my proxy stuff
+if [[ $(uname) == 'Darwin' && $(/usr/sbin/networksetup -getcurrentlocation) == "mecon" ]]; then
+    #set proxy at work
+    webproxy_config=(" ${(@f)$( networksetup -getwebproxy Ethernet | sed -e 's/: /=/' )} ")
+    for line in $webproxy_config; do [[ $line =~ ^(Server|Port) ]] && eval $line; done
+    export  http_proxy="http://${Server}:${Port}"
+    export https_proxy="http://${Server}:${Port}"
+    /usr/local/bin/git config --global http.proxy $http_proxy
 else
-  /usr/local/bin/git config --global http.proxy ''
-  unset http_proxy
-  unset https_proxy
+    #no proxy
+    /usr/local/bin/git config --global http.proxy ''
+    unset http_proxy
+    unset https_proxy
 fi
