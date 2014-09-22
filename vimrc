@@ -17,8 +17,8 @@ set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
 color base16-solarized
 
 set cursorline
-hi cursorline guibg=#333334
-hi CursorColumn guibg=#333333
+hi cursorline cterm=NONE ctermbg=darkblue ctermfg=white guibg=#333334
+hi CursorColumn cterm=NONE ctermbg=darkblue ctermfg=white guibg=#333333
 set showcmd                         " display incomplete commands
 set foldenable                      "auto folding enabled
 set fdm=marker

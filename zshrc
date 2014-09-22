@@ -8,9 +8,8 @@ export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="nicoulaj"
 
 # Example aliases
-alias zshconfig="mate ~/.zshrc"
+alias zshconfig="vim ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias pingu="ssh pingu.solvnt.net $*"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -49,13 +48,22 @@ alias pingu="ssh pingu.solvnt.net $*"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(autojump catimg common-aliases osx brew git themes perl cpanm sudo colorize cp vi-mode tmux web-search)
+#
+plugins=(common-aliases themes colorize vi-mode web-search)
+
+[[ $(uname) == 'Darwin' ]] && plugins+=(osx brew)
+[[ -x $(which convert)  ]] && plugins+=catimg
+
+for cmd in git autojump tmux sudo cp cpanm; do
+  [[ -x $(which ${cmd}) ]] && plugins+=${cmd}
+done
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH="/Volumes/Castle/squee/perl5/perlbrew/bin:/Volumes/Castle/squee/perl5/perlbrew/perls/perl-5.18.1/bin:/Volumes/Castle/squee/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
+export PATH="${HOME}/perl5/perlbrew/bin:${HOME}/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -74,18 +82,38 @@ export PATH="/Volumes/Castle/squee/perl5/perlbrew/bin:/Volumes/Castle/squee/perl
 # ssh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 
+#perlbrew
+[[ -f ~/perl5/perlbrew/etc/bashrc ]] && source ~/perl5/perlbrew/etc/bashrc
 
-# my proxy stuff
-if [[ $(uname) == 'Darwin' && $(/usr/sbin/networksetup -getcurrentlocation) == "mecon" ]]; then
+# proxy stuff on my mac
+if [[ $(uname) == 'Darwin' ]]; then 
+  here=$(/usr/sbin/networksetup -getcurrentlocation)
+  if [[ $here == "mecon"  ]]; then
     #set proxy at work
     webproxy_config=(" ${(@f)$( networksetup -getwebproxy Ethernet | sed -e 's/: /=/' )} ")
     for line in $webproxy_config; do [[ $line =~ ^(Server|Port) ]] && eval $line; done
     export  http_proxy="http://${Server}:${Port}"
     export https_proxy="http://${Server}:${Port}"
     /usr/local/bin/git config --global http.proxy $http_proxy
-else
-    #no proxy
-    /usr/local/bin/git config --global http.proxy ''
+
+  elif [[ $here == 'homeworking' ]]; then
+    export http_proxy='http://127.0.0.1:8080'
+    export https_proxy='http://127.0.0.1:8080'
+    /usr/local/bin/git config --global http.proxy $http_proxy
+  else
     unset http_proxy
     unset https_proxy
+    /usr/local/bin/git config --global http.proxy ''
+  fi
+
+#proxy stuff at work machine
+elif [[ $(uname -n) == 'funnyhat' ]]; then
+  [[ -f ${HOME}/.webproxy ]] && source ${HOME}/.webproxy
+
+else
+  #no proxy
+  /usr/local/bin/git config --global http.proxy ''
+  unset http_proxy
+  unset https_proxy
 fi
+
