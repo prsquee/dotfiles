@@ -14,10 +14,9 @@ set relativenumber
 set ruler                           " show the cursor position all the time
 set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
 
-color base16-solarized
-
+color blackboard
 set cursorline
-hi cursorline cterm=NONE ctermbg=darkblue ctermfg=white guibg=#333334
+hi cursorline   cterm=NONE ctermbg=darkblue ctermfg=white guibg=#333334
 hi CursorColumn cterm=NONE ctermbg=darkblue ctermfg=white guibg=#333333
 set showcmd                         " display incomplete commands
 set foldenable                      "auto folding enabled
@@ -86,13 +85,13 @@ if has("autocmd")
    autocmd BufWinEnter *.* silent loadview
 
    " set 78 width for perl 
-   au FileType perl setlocal textwidth=78
+   au FileType perl setlocal textwidth=80
    au FileType perl setlocal cc=+1
 endif
 
 if has('gui_running')
-  colorscheme base16-solarized
-  
+  colorscheme blackboard
+  hi Visual guifg=Gray guibg=Blue gui=none
   " set guifont=Terminus:h16
   " set guifont=Source\ Code\ Pro\ for\ Powerline:16
   " set guifont=Anonymous\ Pro\ for\ Powerline:h16
@@ -217,7 +216,7 @@ endif
 let g:CommandTMaxHeight=10
 hi StatusLine ctermfg=Blue  ctermbg=White
 
-" highlight a wrong ip addr:
+" highlight an out of range ip
 match errorMsg /\v(2[5][6-9]|2[6-9]\d|[3-9]\d\d)[.]\d{1,3}[.]\d{1,3}[.]\d{1,3}|
                  \\d{1,3}[.](2[5][6-9]|2[6-9]\d|[3-9]\d\d)[.]\d{1,3}[.]\d{1,3}|
                  \\d{1,3}[.]\d{1,3}[.](2[5][6-9]|2[6-9]\d|[3-9]\d\d)[.]\d{1,3}|
@@ -351,8 +350,8 @@ endfunction
 
 command! Reveal call <SID>RevealInFinder()
 
-
 " " " OK THE PARTY IS OVER :( " " " " 
+
 
 " pathogen manager
 call pathogen#infect()
@@ -370,6 +369,7 @@ let g:airline_powerline_fonts=0
 "let g:airline_symbols.branch = '⭠'
 "let g:airline_symbols.readonly = '⭤'
 "let g:airline_symbols.linenr = '⭡'
+
 
 " auto open nerdtree 
 "autocmd StdinReadPre * let s:std_in=1

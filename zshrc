@@ -85,8 +85,18 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 #perlbrew
 [[ -f ~/perl5/perlbrew/etc/bashrc ]] && source ~/perl5/perlbrew/etc/bashrc
 
-# proxy stuff on my mac
+#stuff on my mac
 if [[ $(uname) == 'Darwin' ]]; then 
+  #ssh-agent startup
+  eval $(ssh-agent)
+  function cleanup {
+    echo "Killing SSH-Agent"
+    kill -9 $SSH_AGENT_PID
+  }
+      
+  trap cleanup EXIT
+
+  #setting up proxy if needed.
   here=$(/usr/sbin/networksetup -getcurrentlocation)
   if [[ $here == "mecon"  ]]; then
     #set proxy at work
