@@ -3,7 +3,6 @@ set nocompatible
 set encoding=utf-8
 set ambiwidth=single
 set mouse=nicr
-"set cm=blowfish
 
 filetype plugin indent on
 set smartindent
@@ -22,18 +21,19 @@ set showcmd                         " display incomplete commands
 set foldenable                      "auto folding enabled
 set fdm=marker
 
-set hidden                          " Allow backgrounding buffers without writing them, and remember marks/undo for backgrounded buffers
+set hidden                        " Allow backgrounding buffers without writing them, and remember marks/undo for backgrounded buffers
 set showcmd
 
 "" Whitespace
 set nowrap                        " don't wrap lines
 set tabstop=2                     " a tab is two spaces
-set softtabstop=2                 " 
+set softtabstop=2                 "
 set shiftwidth=2                  " an autoindent (with <<) is two spaces
 set expandtab                     " use spaces, not tabs
 set list                          " Show invisible characters
 set backspace=indent,eol,start    " backspace through everything in insert mode
-" List chars, this can be toggled with leader+l
+
+"" List chars, this can be toggled with leader+l, default is on
 set listchars=""                  " Reset the listchars
 set listchars=tab:▸\ 
 set listchars+=trail:.            " show trailing spaces as dots

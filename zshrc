@@ -69,12 +69,12 @@ export PATH="${HOME}/perl5/perlbrew/bin:${HOME}/bin:/usr/local/bin:/usr/local/sb
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+#Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='mvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -95,35 +95,36 @@ if [[ $(uname) == 'Darwin' ]]; then
   }
       
   trap cleanup EXIT
-
-  #setting up proxy if needed.
-  here=$(/usr/sbin/networksetup -getcurrentlocation)
-  if [[ $here == "mecon"  ]]; then
-    #set proxy at work
-    webproxy_config=(" ${(@f)$( networksetup -getwebproxy Ethernet | sed -e 's/: /=/' )} ")
-    for line in $webproxy_config; do [[ $line =~ ^(Server|Port) ]] && eval $line; done
-    export  http_proxy="http://${Server}:${Port}"
-    export https_proxy="http://${Server}:${Port}"
-    /usr/local/bin/git config --global http.proxy $http_proxy
-
-  elif [[ $here == 'homeworking' ]]; then
-    export http_proxy='http://127.0.0.1:8080'
-    export https_proxy='http://127.0.0.1:8080'
-    /usr/local/bin/git config --global http.proxy $http_proxy
-  else
-    unset http_proxy
-    unset https_proxy
-    /usr/local/bin/git config --global http.proxy ''
-  fi
-
-#proxy stuff at work machine
-elif [[ $(uname -n) == 'funnyhat' ]]; then
-  [[ -f ${HOME}/.webproxy ]] && source ${HOME}/.webproxy
-
-else
-  #no proxy
-  /usr/local/bin/git config --global http.proxy ''
-  unset http_proxy
-  unset https_proxy
 fi
 
+#  #setting up proxy if needed.
+#  here=$(/usr/sbin/networksetup -getcurrentlocation)
+#  if [[ $here == "mecon"  ]]; then
+#    #set proxy at work
+#    webproxy_config=(" ${(@f)$( networksetup -getwebproxy Ethernet | sed -e 's/: /=/' )} ")
+#    for line in $webproxy_config; do [[ $line =~ ^(Server|Port) ]] && eval $line; done
+#    export  http_proxy="http://${Server}:${Port}"
+#    export https_proxy="http://${Server}:${Port}"
+#    /usr/local/bin/git config --global http.proxy $http_proxy
+#
+#  elif [[ $here == 'homeworking' ]]; then
+#    export http_proxy='http://127.0.0.1:8080'
+#    export https_proxy='http://127.0.0.1:8080'
+#    /usr/local/bin/git config --global http.proxy $http_proxy
+#  else
+#    unset http_proxy
+#    unset https_proxy
+#    /usr/local/bin/git config --global http.proxy ''
+#  fi
+#
+##proxy stuff at work machine
+#elif [[ $(uname -n) == 'funnyhat' ]]; then
+#  [[ -f ${HOME}/.webproxy ]] && source ${HOME}/.webproxy
+#
+#else
+#  #no proxy
+#  /usr/local/bin/git config --global http.proxy ''
+#  unset http_proxy
+#  unset https_proxy
+#fi
+#
