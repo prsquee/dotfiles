@@ -1,3 +1,4 @@
+" test1
 syntax enable
 set nocompatible
 set encoding=utf-8
