@@ -58,6 +58,8 @@ for cmd in git autojump tmux sudo cp cpanm; do
   [[ -x $(which ${cmd}) ]] && plugins+=${cmd}
 done
 
+plugins+=avature
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
