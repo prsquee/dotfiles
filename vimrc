@@ -229,9 +229,6 @@ highlight SpecialKey guifg=#4a4a59
 
 " " " " useful (re)maps 
 nmap <leader>l :set list!<CR>
-inoremap ( ()<Esc>i
-inoremap [ []<Esc>i
-inoremap { {}<Esc>i
 " escribir con sudo 
 cabbrev W!! w !sudo tee %
 
