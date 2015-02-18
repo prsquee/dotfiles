@@ -1,3 +1,5 @@
+zmodload zsh/terminfo
+
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -8,7 +10,7 @@ export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="nicoulaj"
 
 # Example aliases
-alias zshconfig="vim ~/.zshrc"
+alias zshconfig="mvim ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Uncomment the following line to use case-sensitive completion.
@@ -18,7 +20,7 @@ alias zshconfig="vim ~/.zshrc"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+export UPDATE_ZSH_DAYS=14
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -30,7 +32,7 @@ alias zshconfig="vim ~/.zshrc"
 # DISABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -87,46 +89,18 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 #perlbrew
 [[ -f ~/perl5/perlbrew/etc/bashrc ]] && source ~/perl5/perlbrew/etc/bashrc
 
-#stuff on my mac
-if [[ $(uname) == 'Darwin' ]]; then 
-  #ssh-agent startup
-  eval $(ssh-agent)
-  function cleanup {
-    echo "Killing SSH-Agent"
-    kill -9 $SSH_AGENT_PID
-  }
-      
-  trap cleanup EXIT
-fi
 
-#  #setting up proxy if needed.
-#  here=$(/usr/sbin/networksetup -getcurrentlocation)
-#  if [[ $here == "mecon"  ]]; then
-#    #set proxy at work
-#    webproxy_config=(" ${(@f)$( networksetup -getwebproxy Ethernet | sed -e 's/: /=/' )} ")
-#    for line in $webproxy_config; do [[ $line =~ ^(Server|Port) ]] && eval $line; done
-#    export  http_proxy="http://${Server}:${Port}"
-#    export https_proxy="http://${Server}:${Port}"
-#    /usr/local/bin/git config --global http.proxy $http_proxy
-#
-#  elif [[ $here == 'homeworking' ]]; then
-#    export http_proxy='http://127.0.0.1:8080'
-#    export https_proxy='http://127.0.0.1:8080'
-#    /usr/local/bin/git config --global http.proxy $http_proxy
-#  else
-#    unset http_proxy
-#    unset https_proxy
-#    /usr/local/bin/git config --global http.proxy ''
-#  fi
-#
-##proxy stuff at work machine
-#elif [[ $(uname -n) == 'funnyhat' ]]; then
-#  [[ -f ${HOME}/.webproxy ]] && source ${HOME}/.webproxy
-#
-#else
-#  #no proxy
-#  /usr/local/bin/git config --global http.proxy ''
-#  unset http_proxy
-#  unset https_proxy
-#fi
-#
+fpath=(/usr/local/share/zsh-completions $fpath)
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/local/opt/zsh-history-substring-search/zsh-history-substring-search.zsh
+
+#vi-mode tweaks
+#reduce ESC lag to 0.1
+export KEYTIMEOUT=1
+
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+
+bindkey "^R" history-incremental-search-backward
+
+
