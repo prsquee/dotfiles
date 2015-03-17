@@ -1,7 +1,7 @@
-" test1
 syntax enable
 set nocompatible
 set encoding=utf-8
+scriptencoding utf-8
 set ambiwidth=single
 set mouse=nicr
 
@@ -14,10 +14,11 @@ set relativenumber
 set ruler                           " show the cursor position all the time
 set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
 
-color blackboard
+colorscheme solarized
 set cursorline
-hi cursorline   cterm=NONE ctermbg=darkblue ctermfg=white guibg=#333334
-hi CursorColumn cterm=NONE ctermbg=darkblue ctermfg=white guibg=#333333
+set cursorcolumn
+hi cursorline   cterm=NONE ctermbg=black guibg=black
+hi cursorcolumn cterm=NONE ctermbg=black guibg=black
 set showcmd                         " display incomplete commands
 set foldenable                      "auto folding enabled
 set fdm=marker
@@ -75,7 +76,7 @@ if has("autocmd")
     \| exe "normal! g`\"" | endif
 
   "reload vimrc on save
-  au BufWritePost ~/.vimrc   so ~/.vimrc
+  " au BufWritePost ~/.vimrc   so ~/.vimrc
 
   " auto update cluster.conf version number
   au BufWritePre,FileWritePre cluster.conf ks|call ClusterVersionPlusPlus()|'s
@@ -91,18 +92,12 @@ if has("autocmd")
 endif
 
 if has('gui_running')
-  colorscheme blackboard
   hi Visual guifg=Gray guibg=Blue gui=none
-  " set guifont=Terminus:h16
-  " set guifont=Source\ Code\ Pro\ for\ Powerline:16
-  " set guifont=Anonymous\ Pro\ for\ Powerline:h16
-  set guifont=Fixedsys\ Excelsior\ 3.01:h16
-  set noantialias
+  set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
   "hi Todo guifg=#40ffff guibg=#606060
-  " set lines=50 columns=96 linespace=0
-  let g:airline_powerline_fonts=0
-"else
-  " something for console Vim
+  "LIGHTLINE
+else
+  " something for console Vim only
 endif
 
 " don't use Ex mode, use Q for formatting
@@ -166,52 +161,8 @@ if exists("+undofile")
   set undofile
 endif
 
-" set undofile
-" set backup
-" set backupdir=~/.vim/backup//,.
-" set directory=~/.vim/tmp//,/var/tmp//,/tmp//,.        " where to put swap files.
-" set spellfile=~/.vim/spell/dict.add                  " added words for spell check
-" set nospell
-" set spell spelllang=en_us,es
-
-
-
 if has("statusline") && !&cp
   set laststatus=2              " always show the status bar
-
-  " Start the status line
-  " %F = full path |  %f = just the filename, what are the rest for?
-  " %h help file flag
-  " %m modified flag
-  " %r readonly flag
-  "
-  " %< force truncation
-  set statusline=
-  set statusline+=%F%m%r%h%w%<
-  set statusline+=%=[%{&ff}]
-  set statusline+=[%{strlen(&fenc)?&fenc:'none'}]
-  set statusline+=%y
-
-
-  " stuff aligned to the left with %= 
-  " set statusline+=[Col:%02v]
-  set statusline+=[%l/%L]
-  "[ascii][hex] code
-"  set statusline+=\ [\%03.3b][0x\%02.2B]
-"  set statusline+=\ Buf:#%n 
-
- set statusline+=[%{FileSize()}]
- fun! FileSize()
-     let bytes = getfsize(expand("%:p"))
-     if bytes <= 0
-         return ""
-     endif
-     if bytes < 1024
-         return bytes . "b"
-     else
-         return (bytes / 1024) . "Kb"
-     endif
- endfun
 endif
 
 let g:CommandTMaxHeight=10
@@ -276,6 +227,10 @@ nnoremap <leader>p :tabp<CR>
 
 " cleanup trailing whitespaces
 nnoremap <silent> <F5> :call StripTrailingWhitespaces()<CR>
+
+" toggle cursorline and column
+nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
+
 
 
 
@@ -355,20 +310,17 @@ command! Reveal call <SID>RevealInFinder()
 call pathogen#infect()
 call pathogen#helptags()
 
-" AIRLINE STUFF "
-let g:airline_powerline_fonts=0
-"if !exists('g:airline_symbols')
-"  let g:airline_symbols = {}
-"endif
-"let g:airline_left_sep = '⮀'
-"let g:airline_left_alt_sep = '⮁'
-"let g:airline_right_sep = '⮂'
-"let g:airline_right_alt_sep = '⮃'
-"let g:airline_symbols.branch = '⭠'
-"let g:airline_symbols.readonly = '⭤'
-"let g:airline_symbols.linenr = '⭡'
+"LIGHTLINE
+let g:lightline = { 
+      \ 'colorscheme': 'solarized',
+      \ 'component': {
+      \   'readonly': '%{&readonly?"":""}',
+      \ },
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' }
+\ }
 
-
+"NERTREE
 " auto open nerdtree 
 "autocmd StdinReadPre * let s:std_in=1
 "autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
