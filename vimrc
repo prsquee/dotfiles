@@ -61,7 +61,7 @@ if has("autocmd")
   au FileType make setlocal noexpandtab
 
   " Make sure all markdown files have the correct filetype set and setup wrapping
-  au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown 
+  au BufRead,BufNewFile *.{md,markdown,mkd,txt} setf markdown 
               \| call s:setupWrapping()
 
   " Treat JSON files like JavaScript
@@ -86,9 +86,9 @@ if has("autocmd")
    autocmd BufWinLeave *.* mkview
    autocmd BufWinEnter *.* silent loadview
 
-   " set 78 width for perl 
+   " set 80 width for perl 
    au FileType perl setlocal textwidth=80
-   au FileType perl setlocal cc=+1
+   au FileType perl setlocal cc=80
 endif
 
 if has('gui_running')
@@ -239,6 +239,7 @@ fun! s:setupWrapping()
     set wrap
     set wrapmargin=2
     set textwidth=72
+    set nocursorline nocursorcolumn 
 endfun
 
 
@@ -263,7 +264,7 @@ endfun
 " open url with leader + w
 map <leader>w :call HandleURI()<CR>
 fun! HandleURI()
-let s:uri = matchstr(getline("."), 'https?:\/\/[^ >,;]+')
+let s:uri = matchstr(getline("."), '\vhttps?:\/\/[^ >,;]+')
 echo s:uri
   if s:uri != ""
     exec "!open \"" . s:uri . "\""
