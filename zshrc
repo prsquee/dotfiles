@@ -54,9 +54,9 @@ COMPLETION_WAITING_DOTS="true"
 plugins=(common-aliases themes colorize vi-mode web-search perl)
 
 [[ $(uname) == 'Darwin' ]] && plugins+=(osx brew)
-[[ -x $(which convert)  ]] && plugins+=catimg
+[[ $(uname) == 'Linux'  ]] && plugins+=(ubuntu)
 
-for cmd in git autojump tmux sudo cp cpanm; do
+for convert cmd in git autojump tmux sudo cp cpanm vagrant; do
   [[ -x $(which ${cmd}) ]] && plugins+=${cmd}
 done
 
