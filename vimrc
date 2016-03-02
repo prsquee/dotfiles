@@ -50,7 +50,7 @@ set listchars+=eol:¬              " end of line char
 set magic                         " \v advance magic here
 set hlsearch                      " highlight matches
 set incsearch                     " incremental searching
-set ignorecase                    " searches are case insensitive...
+set ignorecase                    " searches are case insensitive
 set showmatch
 set smartcase                     " ... unless they contain at least one capital letter
 set pastetoggle=<F2>
@@ -169,10 +169,10 @@ let g:CommandTMaxHeight=10
 hi StatusLine ctermfg=Blue  ctermbg=White
 
 " highlight an out of range ip
-match errorMsg /\v(2[5][6-9]|2[6-9]\d|[3-9]\d\d)[.]\d{1,3}[.]\d{1,3}[.]\d{1,3}|
-                 \\d{1,3}[.](2[5][6-9]|2[6-9]\d|[3-9]\d\d)[.]\d{1,3}[.]\d{1,3}|
-                 \\d{1,3}[.]\d{1,3}[.](2[5][6-9]|2[6-9]\d|[3-9]\d\d)[.]\d{1,3}|
-                 \\d{1,3}[.]\d{1,3}[.]\d{1,3}[.](2[5][6-9]|2[6-9]\d|[3-9]\d\d)/
+match errorMsg /\v(25[6-9]|2[6-9]\d|[3-9]\d\d)\.\d{1,3}[.]\d{1,3}[.]\d{1,3}|
+                 \\d{1,3}\.(25[6-9]|2[6-9]\d|[3-9]\d\d)[.]\d{1,3}[.]\d{1,3}|
+                 \\d{1,3}\.\d{1,3}\.(25[6-9]|2[6-9]\d|[3-9]\d\d)\.\d{1,3}|
+                 \\d{1,3}\.\d{1,3}\.\d{1,3}\.(25[6-9]|2[6-9]\d|[3-9]\d\d)/
 
 highlight NonText guifg=#4a4a59
 highlight SpecialKey guifg=#4a4a59
@@ -197,12 +197,11 @@ nnoremap ? ?\v
 nmap n nzz
 nmap N Nzz
 
-" space for win
-noremap <Space> :
-"imap <S-Space> <ESC>
-" space copy select
-vmap <Space> y
-
+" space for toggle folding {{{
+nnoremap <Space> za
+" space copy to select in visual
+vnoremap <Space> y
+" }}}
 " usar las flechitas para mover entre ventanas
 " nnoremap <Down>   <C-w>j
 nnoremap <Up>     <C-w>k
