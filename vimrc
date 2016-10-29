@@ -237,8 +237,9 @@ nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
 fun! s:setupWrapping()
     set wrap
     set wrapmargin=2
-    set textwidth=72
-    set nocursorline nocursorcolumn 
+    set textwidth=80
+    set nocursorline nocursorcolumn
+    set linebreak
 endfun
 
 
