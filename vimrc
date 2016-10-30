@@ -14,7 +14,6 @@ set relativenumber
 set ruler                           " show the cursor position all the time
 set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
 
-colorscheme solarized
 set cursorline
 set cursorcolumn
 hi cursorline   cterm=NONE ctermbg=black guibg=black
@@ -320,6 +319,9 @@ let g:lightline = {
       \ 'separator': { 'left': '', 'right': '' },
       \ 'subseparator': { 'left': '', 'right': '' }
 \ }
+
+" load solarized after pathogen
+colorscheme solarized
 
 "NERTREE
 " auto open nerdtree 
