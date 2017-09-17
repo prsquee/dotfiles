@@ -14,7 +14,7 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Change caps_lock to command+control+option+shift. Escape if no other key used.",
+                                "description": "Change caps_lock to hyper (control+option+shift). Escape if no other key used.",
                                 "from": {
                                     "key_code": "caps_lock",
                                     "modifiers": {
@@ -27,7 +27,6 @@
                                     {
                                         "key_code": "left_shift",
                                         "modifiers": [
-                                            "left_command",
                                             "left_control",
                                             "left_option"
                                         ]
@@ -56,7 +55,6 @@
                                     "modifiers": {
                                         "mandatory": [
                                             "left_shift",
-                                            "left_command",
                                             "left_control",
                                             "left_option"
                                         ],
@@ -78,7 +76,6 @@
                                     "modifiers": {
                                         "mandatory": [
                                             "left_shift",
-                                            "left_command",
                                             "left_control",
                                             "left_option"
                                         ],
@@ -100,7 +97,6 @@
                                     "modifiers": {
                                         "mandatory": [
                                             "left_shift",
-                                            "left_command",
                                             "left_control",
                                             "left_option"
                                         ],
@@ -122,7 +118,6 @@
                                     "modifiers": {
                                         "mandatory": [
                                             "left_shift",
-                                            "left_command",
                                             "left_control",
                                             "left_option"
                                         ],
@@ -144,7 +139,6 @@
                                     "modifiers": {
                                         "mandatory": [
                                             "left_shift",
-                                            "left_command",
                                             "left_control",
                                             "left_option"
                                         ],
