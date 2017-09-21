@@ -4,7 +4,7 @@ set encoding=utf-8
 scriptencoding utf-8
 set ambiwidth=single
 set mouse=nicr
-
+set autoread                        "auto reaload vimrc"
 filetype plugin indent on
 set smartindent
 set background=dark
@@ -15,7 +15,7 @@ set ruler                           " show the cursor position all the time
 set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
 
 set cursorline
-set cursorcolumn
+set nocursorcolumn
 hi cursorline   cterm=NONE ctermbg=black guibg=black
 hi cursorcolumn cterm=NONE ctermbg=black guibg=black
 set showcmd                         " display incomplete commands
@@ -176,17 +176,16 @@ match errorMsg /\v(25[6-9]|2[6-9]\d|[3-9]\d\d)\.\d{1,3}[.]\d{1,3}[.]\d{1,3}|
 highlight NonText guifg=#4a4a59
 highlight SpecialKey guifg=#4a4a59
 
-
-" " " " useful (re)maps 
+" " " " useful (re)maps
 nmap <leader>l :set list!<CR>
-" escribir con sudo 
+
+" escribir con sudo
 cabbrev W!! w !sudo tee %
 
 imap jk <ESC>
 imap jj <ESC>
 imap hh <ESC>
 imap kk <ESC>
-"imap kl <ESC> "conflic with the words pickle ducklings klingon klaus
 
 " magic search
 nnoremap / /\v
@@ -201,12 +200,17 @@ nnoremap <Space> za
 " space copy to select in visual
 vnoremap <Space> y
 " }}}
-" usar las flechitas para mover entre ventanas
-" nnoremap <Down>   <C-w>j
+
+" window movement 
+nnoremap <Down>   <C-w>j
 nnoremap <Up>     <C-w>k
 nnoremap <Left>   <C-w>h
 nnoremap <Right>  <C-w>l
 
+nnoremap <S-Down>   <C-w>J
+nnoremap <S-Up>     <C-w>K
+nnoremap <S-Left>   <C-w>H
+nnoremap <S-Right>  <C-w>L
 
 " usar las flechitas para mover entre ventanas
 " nnoremap <Down>   <C-w>j
@@ -311,14 +315,40 @@ call pathogen#infect()
 call pathogen#helptags()
 
 "LIGHTLINE
-let g:lightline = { 
-      \ 'colorscheme': 'solarized',
-      \ 'component': {
-      \   'readonly': '%{&readonly?"":""}',
-      \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' }
-\ }
+"trying pure unicode instead of powerline
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_powerline_fonts = 0
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.whitespace = 'Ξ'
+
+if g:airline_powerline_fonts == 1
+    let g:airline_left_sep = ''
+    let g:airline_left_alt_sep = ''
+    let g:airline_right_sep = ''
+    let g:airline_right_alt_sep = ''
+    let g:airline_symbols.branch = ''
+    let g:airline_symbols.readonly = ''
+    let g:airline_symbols.linenr = ''
+else
+    let g:airline_left_sep = ''
+    let g:airline_left_alt_sep = ''
+    let g:airline_right_sep = ''
+    let g:airline_right_alt_sep = ''
+    let g:airline_symbols.branch = '⎋'
+    let g:airline_symbols.readonly = '✖︎'
+    let g:airline_symbols.linenr = '␤'
+end
+
+"let g:lightline = {
+"      \ 'colorscheme': 'solarized',
+"      \ 'component': {
+"      \   'readonly': '%{&readonly?"":""}',
+"      \ },
+"      \ 'separator': { 'left': '', 'right': '' },
+"      \ 'subseparator': { 'left': '', 'right': '' }
+"\ }
 
 " load solarized after pathogen
 colorscheme solarized
@@ -328,3 +358,9 @@ colorscheme solarized
 "autocmd StdinReadPre * let s:std_in=1
 "autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 map <silent> <F15> :NERDTreeToggle<CR>
+
+" vim-markdown config
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_no_default_key_mappings = 1
+let g:vim_markdown_emphasis_multiline = 0
+
