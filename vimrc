@@ -290,7 +290,7 @@ endfun
 
 "open in finder
 
-function! s:RevealInFinder()
+fun! s:RevealInFinder()
   if filereadable(expand("%"))
     let l:command = "open -R %"
   elseif getftype(expand("%:p:h")) == "dir"
@@ -303,7 +303,7 @@ function! s:RevealInFinder()
 
   " For terminal Vim not to look messed up.
   redraw!
-endfunction
+endfun
 
 command! Reveal call <SID>RevealInFinder()
 
@@ -321,12 +321,23 @@ set noshowmode  " remove -- INSER -- line below"
 
 let g:lightline = {
       \ 'colorscheme': 'solarized',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
       \ 'component': {
-      \   'readonly': '%{&readonly?"✖︎":""}',
+      \   'readonly': '%{&readonly ? "✖︎" : ""}',
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'LightlineBranchName'
       \ },
       \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' }
+      \ 'subseparator': { 'left': '❯', 'right': '❮' }
 \ }
+fun! LightlineBranchName()
+  return gitbranch#name() == '' ? '' : 'ᚠ ' . gitbranch#name()
+endfun
+
 
 " load solarized after pathogen
 colorscheme solarized
