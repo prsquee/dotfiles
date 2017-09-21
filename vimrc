@@ -316,39 +316,17 @@ call pathogen#helptags()
 
 "LIGHTLINE
 "trying pure unicode instead of powerline
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-let g:airline_powerline_fonts = 0
-let g:airline_symbols.paste = 'ρ'
-let g:airline_symbols.whitespace = 'Ξ'
+"
+set noshowmode  " remove -- INSER -- line below"
 
-if g:airline_powerline_fonts == 1
-    let g:airline_left_sep = ''
-    let g:airline_left_alt_sep = ''
-    let g:airline_right_sep = ''
-    let g:airline_right_alt_sep = ''
-    let g:airline_symbols.branch = ''
-    let g:airline_symbols.readonly = ''
-    let g:airline_symbols.linenr = ''
-else
-    let g:airline_left_sep = ''
-    let g:airline_left_alt_sep = ''
-    let g:airline_right_sep = ''
-    let g:airline_right_alt_sep = ''
-    let g:airline_symbols.branch = '⎋'
-    let g:airline_symbols.readonly = '✖︎'
-    let g:airline_symbols.linenr = '␤'
-end
-
-"let g:lightline = {
-"      \ 'colorscheme': 'solarized',
-"      \ 'component': {
-"      \   'readonly': '%{&readonly?"":""}',
-"      \ },
-"      \ 'separator': { 'left': '', 'right': '' },
-"      \ 'subseparator': { 'left': '', 'right': '' }
-"\ }
+let g:lightline = {
+      \ 'colorscheme': 'solarized',
+      \ 'component': {
+      \   'readonly': '%{&readonly?"✖︎":""}',
+      \ },
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' }
+\ }
 
 " load solarized after pathogen
 colorscheme solarized
