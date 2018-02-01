@@ -1,0 +1,1 @@
+/Users/squee/Dropbox/bkp/bin/24say.sh
