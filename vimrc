@@ -327,6 +327,7 @@ let g:lightline = {
       \ },
       \ 'component': {
       \   'readonly': '%{&readonly ? "✖︎" : ""}',
+      \   'filename': expand("%")
       \ },
       \ 'component_function': {
       \   'gitbranch': 'LightlineBranchName'
@@ -337,7 +338,6 @@ let g:lightline = {
 fun! LightlineBranchName()
   return gitbranch#name() == '' ? '' : 'ᚠ ' . gitbranch#name()
 endfun
-
 
 " load solarized after pathogen
 colorscheme solarized
