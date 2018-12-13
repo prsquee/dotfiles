@@ -7,7 +7,7 @@ set mouse=nicr
 set autoread                        "auto reaload vimrc"
 filetype plugin indent on
 set smartindent
-set background=dark
+set background=light
 set t_Co=256
 set number
 set relativenumber
@@ -307,7 +307,7 @@ endfun
 
 command! Reveal call <SID>RevealInFinder()
 
-" " " OK THE PARTY IS OVER :( " " " " 
+" " " OK THE PARTY IS OVER :( " " " "
 
 
 " pathogen manager
@@ -323,11 +323,13 @@ let g:lightline = {
       \ 'colorscheme': 'solarized',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+      \   'right': [['lineinfo'], ['percent'], [ 'charvalue', 'fileformat', 'fileencoding', 'filetype' ]]
       \ },
       \ 'component': {
       \   'readonly': '%{&readonly ? "✖︎" : ""}',
-      \   'filename': expand("%")
+      \   'filename': expand("%"),
+      \   'charvalue': '0x%B'
       \ },
       \ 'component_function': {
       \   'gitbranch': 'LightlineBranchName'
