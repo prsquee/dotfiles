@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 announce_time () {
-  say -v Samantha "the following takes place between $(/bin/date "+%I %p") and $(/bin/date -v+1H "+%I %p")"
+  say -v Samantha "the following takes place between $(/bin/date "+%l %p") and $(/bin/date -v+1H "+%l %p")"
   exit 0
 }
 # check if DnD is on
