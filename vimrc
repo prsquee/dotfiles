@@ -74,8 +74,8 @@ if has("autocmd")
   au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g`\"" | endif
 
-  "reload vimrc on save
-  " au BufWritePost ~/.vimrc   so ~/.vimrc
+  " reload vimrc on save
+  au BufWritePost ~/.vimrc   so ~/.vimrc
 
   " auto update cluster.conf version number
   au BufWritePre,FileWritePre cluster.conf ks|call ClusterVersionPlusPlus()|'s
@@ -85,9 +85,9 @@ if has("autocmd")
    autocmd BufWinLeave *.* mkview
    autocmd BufWinEnter *.* silent loadview
 
-   " set 80 width for perl 
-   au FileType perl setlocal textwidth=80
-   au FileType perl setlocal cc=80
+  " test uuid highlight
+  au BufNewFile,BufRead *.uuid set filetype=uuid
+
 endif
 
 if has('gui_running')
@@ -309,7 +309,6 @@ command! Reveal call <SID>RevealInFinder()
 
 " " " OK THE PARTY IS OVER :( " " " "
 
-
 " pathogen manager
 call pathogen#infect()
 call pathogen#helptags()
@@ -323,12 +322,11 @@ let g:lightline = {
       \ 'colorscheme': 'solarized',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+      \             [ 'gitbranch', 'readonly', 'absolutepath', 'modified' ] ],
       \   'right': [['lineinfo'], ['percent'], [ 'charvalue', 'fileformat', 'fileencoding', 'filetype' ]]
       \ },
       \ 'component': {
       \   'readonly': '%{&readonly ? "✖︎" : ""}',
-      \   'filename': expand("%"),
       \   'charvalue': '0x%B'
       \ },
       \ 'component_function': {
@@ -343,15 +341,4 @@ endfun
 
 " load solarized after pathogen
 colorscheme solarized
-
-"NERTREE
-" auto open nerdtree 
-"autocmd StdinReadPre * let s:std_in=1
-"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-map <silent> <F15> :NERDTreeToggle<CR>
-
-" vim-markdown config
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_no_default_key_mappings = 1
-let g:vim_markdown_emphasis_multiline = 0
 
