@@ -303,7 +303,3 @@ endfun
 
 " load solarized after pathogen
 colorscheme solarized
-<<<<<<< HEAD
-=======
-
->>>>>>> 64027a523790c06aff568f8ae45ba8a70e6e0712
