@@ -75,7 +75,14 @@ if has("autocmd")
   au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g`\"" | endif
 
-endif
+  "auto save views and folds
+   autocmd BufWinLeave *.* mkview
+   autocmd BufWinEnter *.* silent loadview
+
+   " set 80 width for perl
+   au FileType perl setlocal textwidth=80
+   au FileType perl setlocal cc=80
+ endif
 
 if has('gui_running')
   hi Visual guifg=Gray guibg=Blue gui=none
@@ -193,6 +200,8 @@ nnoremap <Space> za
 " space copy to select in visual
 vnoremap <Space> y
 " }}}
+" search the word selected in visual mode
+vnoremap / y/\v<C-R>"<CR>
 
 " window movement
 nnoremap <Down>   <C-w>j
@@ -284,12 +293,11 @@ let g:lightline = {
       \ 'colorscheme': 'solarized',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'absolutepath', 'modified' ] ],
-      \   'right': [['lineinfo'], ['percent'], [ 'charvalue', 'fileformat', 'fileencoding', 'filetype' ]]
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
       \ },
       \ 'component': {
       \   'readonly': '%{&readonly ? "✖︎" : ""}',
-      \   'charvalue': '0x%B'
+      \   'filename': expand("%")
       \ },
       \ 'component_function': {
       \   'gitbranch': 'LightlineBranchName'
