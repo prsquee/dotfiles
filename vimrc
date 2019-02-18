@@ -75,14 +75,7 @@ if has("autocmd")
   au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g`\"" | endif
 
-  "auto save views and folds
-   autocmd BufWinLeave *.* mkview
-   autocmd BufWinEnter *.* silent loadview
-
-   " set 80 width for perl
-   au FileType perl setlocal textwidth=80
-   au FileType perl setlocal cc=80
- endif
+endif
 
 if has('gui_running')
   hi Visual guifg=Gray guibg=Blue gui=none
@@ -291,11 +284,12 @@ let g:lightline = {
       \ 'colorscheme': 'solarized',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \             [ 'gitbranch', 'readonly', 'absolutepath', 'modified' ] ],
+      \   'right': [['lineinfo'], ['percent'], [ 'charvalue', 'fileformat', 'fileencoding', 'filetype' ]]
       \ },
       \ 'component': {
       \   'readonly': '%{&readonly ? "✖︎" : ""}',
-      \   'filename': expand("%")
+      \   'charvalue': '0x%B'
       \ },
       \ 'component_function': {
       \   'gitbranch': 'LightlineBranchName'
@@ -309,3 +303,7 @@ endfun
 
 " load solarized after pathogen
 colorscheme solarized
+<<<<<<< HEAD
+=======
+
+>>>>>>> 64027a523790c06aff568f8ae45ba8a70e6e0712
