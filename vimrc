@@ -61,9 +61,8 @@ if has("autocmd")
 
   " Make sure all markdown files have the correct filetype set and setup wrapping
   au BufRead,BufNewFile,BufWritePre *.{md,markdown,mkd,txt}
-        \ call SetupWrapping()    |
-        \ colorscheme blackboard  |
-        \ :normal gggqG
+        \ call SetupWrapping() |
+        \ colorscheme blackboard
 
   " Treat JSON files like JavaScript
   au BufNewFile,BufRead *.json set ft=json
@@ -314,33 +313,34 @@ endfun
 colorscheme solarized
 
 
+
 " " Multiword search
 " http://vim.wikia.com/wiki/Talk:Highlight_multiple_words
 " http://vim.wikia.com/wiki/Highlight_multiple_words
 
-" matchadd() priority -1 means 'hlsearch' will override the match.
-" function! DoHighlight(hlnum, search_term)
-"   call UndoHighlight(a:hlnum)
-"   if len(a:search_term) > 0
-"     let id = matchadd("hl".a:hlnum, a:search_term, -1)
-"     let g:matchadd_ids[a:hlnum] = id
-"   endif
-" endfunction
+matchadd() priority -1 means 'hlsearch' will override the match.
+function! DoHighlight(hlnum, search_term)
+  call UndoHighlight(a:hlnum)
+  if len(a:search_term) > 0
+    let id = matchadd("hl".a:hlnum, a:search_term, -1)
+    let g:matchadd_ids[a:hlnum] = id
+  endif
+endfunction
 
-" function! UndoHighlight(hlnum)
-"   silent! call matchdelete(g:matchadd_ids[a:hlnum])
-" endfunction
+function! UndoHighlight(hlnum)
+  silent! call matchdelete(g:matchadd_ids[a:hlnum])
+endfunction
 
-" function! SetHighlight(hlnum, colour)
-"   if len(a:colour) > 0
-"     exe "highlight hl".a:hlnum." term=bold ctermfg=".a:colour." guifg=".a:colour
-"   endif
-" endfunction
+function! SetHighlight(hlnum, colour)
+  if len(a:colour) > 0
+    exe "highlight hl".a:hlnum." term=bold ctermfg=".a:colour." guifg=".a:colour
+  endif
+endfunction
 
-" let g:matchadd_ids = {}
-" call SetHighlight(1, 'blue')
-" call SetHighlight(2, 'green')
-" call SetHighlight(3, 'red')
-" nnoremap <Leader>ma :<C-u>call DoHighlight(v:count1, expand("<cword>"))<CR>
-" nnoremap <Leader>md :<C-u>call UndoHighlight(v:count1)<CR>
-" nnoremap <Leader>mc :<C-u>call SetHighlight(v:count1, input("Enter colour: "))<CR>
+let g:matchadd_ids = {}
+call SetHighlight(1, 'blue')
+call SetHighlight(2, 'green')
+call SetHighlight(3, 'red')
+nnoremap <Leader>ma :<C-u>call DoHighlight(v:count1, expand("<cword>"))<CR>
+nnoremap <Leader>md :<C-u>call UndoHighlight(v:count1)<CR>
+nnoremap <Leader>mc :<C-u>call SetHighlight(v:count1, input("Enter colour: "))<CR>
