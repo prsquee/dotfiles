@@ -7,7 +7,7 @@ set mouse=nicr
 set autoread                        "auto reaload vimrc"
 filetype plugin indent on
 set smartindent
-set background=dark
+set background=light
 set t_Co=256
 set number
 set relativenumber
@@ -60,8 +60,9 @@ if has("autocmd")
   au FileType make setlocal noexpandtab
 
   " Make sure all markdown files have the correct filetype set and setup wrapping
-  au BufRead,BufNewFile *.{md,markdown,mkd,txt} setf markdown 
-              \| call s:setupWrapping()
+  au BufRead,BufNewFile,BufWritePre *.{md,markdown,mkd,txt}
+        \ call SetupWrapping() |
+        \ :normal gggqG
 
   " Treat JSON files like JavaScript
   au BufNewFile,BufRead *.json set ft=json
@@ -74,21 +75,14 @@ if has("autocmd")
   au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g`\"" | endif
 
-  "reload vimrc on save
-  " au BufWritePost ~/.vimrc   so ~/.vimrc
-
-  " auto update cluster.conf version number
-  au BufWritePre,FileWritePre cluster.conf ks|call ClusterVersionPlusPlus()|'s
-  au BufWritePre,FileWritePre *.txt   ks|call LastMod()|'s
-
   "auto save views and folds
    autocmd BufWinLeave *.* mkview
    autocmd BufWinEnter *.* silent loadview
 
-   " set 80 width for perl 
+   " set 80 width for perl
    au FileType perl setlocal textwidth=80
    au FileType perl setlocal cc=80
-endif
+ endif
 
 if has('gui_running')
   hi Visual guifg=Gray guibg=Blue gui=none
@@ -110,6 +104,12 @@ let mapleader=","
 " find merge conflict markers
 " nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 
+
+if has("macunix")
+  nmap <silent> <Leader>d :!open dict://<cword><CR><CR>
+  nmap <silent> <Leader>m :!open wais://1/<cword><CR><CR>
+endif
+
 command! KillWhitespace :normal :%s/ *$//g<CR><c-o><CR>
 
 
@@ -119,7 +119,7 @@ if $TMUX == ''
 endif
 " set clipboard=unnamed
 
-" Save your backups 
+" Save your backups
 " If you have .vim-backup in the current directory, it'll use that.
 " Otherwise it saves it to ~/.vim/backup or . if all else fails.
 
@@ -201,7 +201,7 @@ nnoremap <Space> za
 vnoremap <Space> y
 " }}}
 
-" window movement 
+" window movement
 nnoremap <Down>   <C-w>j
 nnoremap <Up>     <C-w>k
 nnoremap <Left>   <C-w>h
@@ -212,54 +212,22 @@ nnoremap <S-Up>     <C-w>K
 nnoremap <S-Left>   <C-w>H
 nnoremap <S-Right>  <C-w>L
 
-" usar las flechitas para mover entre ventanas
-" nnoremap <Down>   <C-w>j
-nnoremap <Up>     <C-w>k
-nnoremap <Left>   <C-w>h
-nnoremap <Right>  <C-w>l
-
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-h> <C-w>h
-nnoremap <C-l> <C-w>l
-
 " move btween tabs
 nnoremap <leader>n :tabn<CR>
 nnoremap <leader>p :tabp<CR>
 
-" cleanup trailing whitespaces
-nnoremap <silent> <F5> :call StripTrailingWhitespaces()<CR>
-
 " toggle cursorline and column
 nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
 
-
-
-
-" " " " PARTY TAIM  " " " " 
-fun! s:setupWrapping()
+" " " " PARTY TAIM  " " " "
+fun! SetupWrapping()
     set wrap
     set wrapmargin=2
-    set textwidth=80
+    set textwidth=120
     set nocursorline nocursorcolumn
     set linebreak
-endfun
-
-
-fun! LastMod()
-  if line("$") > 20
-    let l = 20
-  else
-    let l = line("$")
-  endif
-  exe "1," . l . "g#Last modified: #s#^(.*Last modified:) .*#\1 " . strftime("%Y %b %d - %H:%m")
-endfun
-
-fun! ClusterVersionPlusPlus()
-  if &modified
-    exe search('config_version','c')
-    exe 's/\d\+/\=submatch(0)+1/'
-  endif
+    set nolist
+    set spell
 endfun
 
 
@@ -307,9 +275,9 @@ endfun
 
 command! Reveal call <SID>RevealInFinder()
 
-" " " OK THE PARTY IS OVER :( " " " " 
+" " " OK THE PARTY IS OVER :( " " " "
 
-
+" " " plugin configurations " " " 
 " pathogen manager
 call pathogen#infect()
 call pathogen#helptags()
@@ -341,15 +309,3 @@ endfun
 
 " load solarized after pathogen
 colorscheme solarized
-
-"NERTREE
-" auto open nerdtree 
-"autocmd StdinReadPre * let s:std_in=1
-"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-map <silent> <F15> :NERDTreeToggle<CR>
-
-" vim-markdown config
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_no_default_key_mappings = 1
-let g:vim_markdown_emphasis_multiline = 0
-
