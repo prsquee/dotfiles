@@ -4,22 +4,23 @@ set encoding=utf-8
 scriptencoding utf-8
 set ambiwidth=single
 set mouse=nicr
-set autoread                        "auto reaload vimrc"
+set autoread
 filetype plugin indent on
 set smartindent
-set background=light
 set t_Co=256
 set number
 set relativenumber
-set ruler                           " show the cursor position all the time
+set ruler
 set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
 
 set cursorline
 set nocursorcolumn
-hi cursorline   cterm=NONE ctermbg=black guibg=black
-hi cursorcolumn cterm=NONE ctermbg=black guibg=black
-set showcmd                         " display incomplete commands
-set foldenable                      "auto folding enabled
+
+highlight cursorline   cterm=NONE ctermbg=black guibg=black
+highlight cursorcolumn cterm=NONE ctermbg=black guibg=black
+
+set showcmd                       " display incomplete commands
+set foldenable                    "auto folding enabled
 set fdm=marker
 
 set hidden                        " Allow backgrounding buffers without writing them, and remember marks/undo for backgrounded buffers
@@ -55,6 +56,9 @@ set smartcase                     " ... unless they contain at least one capital
 set pastetoggle=<F2>
 set scrolloff=3                   " provide some context when editing
 
+set history=100
+
+" autocommands {{{
 if has("autocmd")
   " In Makefiles, use real tabs, not tabs expanded to spaces
   au FileType make setlocal noexpandtab
@@ -63,7 +67,8 @@ if has("autocmd")
   au BufRead,BufNewFile,BufWritePre *.{md,markdown,mkd,txt}
         \ call SetupWrapping() |
         \ colorscheme blackboard |
-        \ call s:lightline_update()
+        \ call s:lightline_update() |
+        \ call SetupUUIDHighlights()
 
   " Treat JSON files like JavaScript
   au BufNewFile,BufRead *.json set ft=json
@@ -89,7 +94,8 @@ if has("autocmd")
    "   autocmd ColorScheme * call s:lightline_update()
    " augroup end
  endif
-
+" }}}
+" GUI specific configurations {{{
 if has('gui_running')
   hi Visual guifg=Gray guibg=Blue gui=none
   set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
@@ -98,40 +104,26 @@ if has('gui_running')
 else
   " something for console Vim only
 endif
+"}}}
 
-" don't use Ex mode, use Q for formatting
-map Q gq
-
-" clear the search buffer when hitting return
-:nnoremap <CR> :nohlsearch<CR>
 
 let mapleader=","
 
-" find merge conflict markers
-" nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
-
-
 if has("macunix")
-  nmap <silent> <Leader>d :!open dict://<cword><CR><CR>
-  nmap <silent> <Leader>m :!open wais://1/<cword><CR><CR>
+  nnoremap <silent> <Leader>d :!open dict://<cword><CR><CR>
+  nnoremap <silent> <Leader>m :!open wais://1/<cword><CR><CR>
 endif
 
-command! KillWhitespace :normal :%s/ *$//g<CR><c-o><CR>
-
-
-set history=100
 if $TMUX == ''
   set clipboard+=unnamed
 endif
-" set clipboard=unnamed
 
+" backups, swap and undo files {{{
 " Save your backups
-" If you have .vim-backup in the current directory, it'll use that.
-" Otherwise it saves it to ~/.vim/backup or . if all else fails.
-
 if isdirectory($HOME . '/.vim/backup') == 0
   :silent !mkdir -p ~/.vim/backup >/dev/null 2>&1
 endif
+
 set backupdir-=.
 set backupdir+=.
 set backupdir-=~/
@@ -139,12 +131,11 @@ set backupdir^=~/.vim/backup/
 set backupdir^=./.vim-backup/
 set backup
 
-" swap files
-" If you have .vim-swap in the current directory, it'll use that.
-" Otherwise it saves it to ~/.vim/swap, ~/tmp or .
+" Swap files
 if isdirectory($HOME . '/.vim/swap') == 0
   :silent !mkdir -p ~/.vim/swap >/dev/null 2>&1
 endif
+
 set directory=./.vim-swap//
 set directory+=~/.vim/swap//
 set directory+=~/tmp//
@@ -165,28 +156,11 @@ if exists("+undofile")
   set undodir+=~/.vim/undo//
   set undofile
 endif
-
-if has("statusline") && !&cp
-  set laststatus=2              " always show the status bar
-endif
-
-let g:CommandTMaxHeight=10
-hi StatusLine ctermfg=Blue  ctermbg=White
-
-" highlight an out of range ip
-match errorMsg /\v(25[6-9]|2[6-9]\d|[3-9]\d\d)\.\d{1,3}[.]\d{1,3}[.]\d{1,3}|
-                 \\d{1,3}\.(25[6-9]|2[6-9]\d|[3-9]\d\d)[.]\d{1,3}[.]\d{1,3}|
-                 \\d{1,3}\.\d{1,3}\.(25[6-9]|2[6-9]\d|[3-9]\d\d)\.\d{1,3}|
-                 \\d{1,3}\.\d{1,3}\.\d{1,3}\.(25[6-9]|2[6-9]\d|[3-9]\d\d)/
-
-highlight NonText guifg=#4a4a59
-highlight SpecialKey guifg=#4a4a59
-
-" " " " useful (re)maps
-nmap <leader>l :set list!<CR>
-
-" escribir con sudo
-cabbrev W!! w !sudo tee %
+"  }}}
+" remaps {{{ 
+" clear the search buffer when hitting return
+nnoremap <CR> :nohlsearch<CR>
+nnoremap <leader>l :set list!<CR>
 
 imap jk <ESC>
 imap jj <ESC>
@@ -197,37 +171,33 @@ imap kk <ESC>
 nnoremap / /\v
 nnoremap ? ?\v
 
-" next highlight always centered
-nmap n nzz
-nmap N Nzz
+" center next highlight
+nnoremap n nzz
+nnoremap N Nzz
 
-" space for toggle folding {{{
-nnoremap <Space> za
-" space copy to select in visual
-vnoremap <Space> y
-" }}}
 " search the word selected in visual mode
 vnoremap / y/\v<C-R>"<CR>
-
-" window movement
-nnoremap <Down>   <C-w>j
-nnoremap <Up>     <C-w>k
-nnoremap <Left>   <C-w>h
-nnoremap <Right>  <C-w>l
-
-nnoremap <S-Down>   <C-w>J
-nnoremap <S-Up>     <C-w>K
-nnoremap <S-Left>   <C-w>H
-nnoremap <S-Right>  <C-w>L
-
-" move btween tabs
-nnoremap <leader>n :tabn<CR>
-nnoremap <leader>p :tabp<CR>
 
 " toggle cursorline and column
 nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
 
-" " " " PARTY TAIM  " " " "
+" space for toggle folding
+nnoremap <Space> za
+" space copy to select in visual
+vnoremap <Space> y
+" window movement
+nnoremap <Down>    <C-w>j
+nnoremap <Up>      <C-w>k
+nnoremap <Left>    <C-w>h
+nnoremap <Right>   <C-w>l
+
+nnoremap <S-Down>  <C-w>J
+nnoremap <S-Up>    <C-w>K
+nnoremap <S-Left>  <C-w>H
+nnoremap <S-Right> <C-w>L
+
+" }}}
+" functions {{{
 fun! SetupWrapping()
     set wrap
     set wrapmargin=2
@@ -235,7 +205,8 @@ fun! SetupWrapping()
     set nocursorline nocursorcolumn
     set linebreak
     set nolist
-    set spell
+    set nospell
+    syntax off
 endfun
 
 
@@ -292,10 +263,28 @@ fun! s:lightline_update()
   catch
   endtry
 endfun
+" }}}
+" misc {{{
+" always show the status bar
+if has("statusline") && !&cp
+  set laststatus=2 
+endif
 
-" " " OK THE PARTY IS OVER :( " " " "
+let g:CommandTMaxHeight=10
+highlight StatusLine ctermfg=Blue ctermbg=White
 
-" " " plugin configurations " " "
+" highlight an out of range ip
+match errorMsg /\v(25[6-9]|2[6-9]\d|[3-9]\d\d)\.\d{1,3}[.]\d{1,3}[.]\d{1,3}|
+                 \\d{1,3}\.(25[6-9]|2[6-9]\d|[3-9]\d\d)[.]\d{1,3}[.]\d{1,3}|
+                 \\d{1,3}\.\d{1,3}\.(25[6-9]|2[6-9]\d|[3-9]\d\d)\.\d{1,3}|
+                 \\d{1,3}\.\d{1,3}\.\d{1,3}\.(25[6-9]|2[6-9]\d|[3-9]\d\d)/
+
+highlight NonText guifg=#4a4a59
+highlight SpecialKey guifg=#4a4a59
+
+cabbrev W!! w !sudo tee %
+" }}}
+" plugin configurations {{{
 
 call pathogen#infect()
 call pathogen#helptags()
@@ -324,36 +313,51 @@ let g:lightline = {
 fun! LightlineBranchName()
   return gitbranch#name() == '' ? '' : 'ᚠ ' . gitbranch#name()
 endfun
-
-" load solarized after pathogen
+" }}}
+" solarized config
 colorscheme solarized
+set background=dark
 
-" " Multiword search
-" http://vim.wikia.com/wiki/Talk:Highlight_multiple_words
-" http://vim.wikia.com/wiki/Highlight_multiple_words
+" put this in a plugin {{{
+" Use getmatches() rather than dictionary (works in multiple windows).
+function! DoHighlight(hlnum, search_term)
+  call UndoHighlight(a:hlnum)
+  if len(a:search_term) > 0
+    let id = matchadd('uuid'.a:hlnum, a:search_term, -1)
+  endif
+endfunction
 
-" matchadd() priority -1 means 'hlsearch' will override the match.
-" function! DoHighlight(hlnum, search_term)
-"   call UndoHighlight(a:hlnum)
-"   if len(a:search_term) > 0
-"     let id = matchadd("hl".a:hlnum, a:search_term, -1)
-"     let g:matchadd_ids[a:hlnum] = id
-"   endif
-" endfunction
+function! UndoHighlight(hlnum)
+  silent! call matchdelete(GetId(a:hlnum))
+endfunction
 
-" function! UndoHighlight(hlnum)
-"   silent! call matchdelete(g:matchadd_ids[a:hlnum])
-" endfunction
+function! GetId(hlnum)
+  for m in getmatches()
+    if m['group'] == 'uuid'.a:hlnum
+      return m['id']
+    endif
+  endfor
+  return 0
+endfunction
 
-" function! SetHighlight(hlnum, colour)
-"   if len(a:colour) > 0
-"     exe "highlight hl".a:hlnum." term=bold ctermfg=".a:colour." guifg=".a:colour
-"   endif
-" endfunction
+function! SetHighlight(hlnum, fgcolor)
+  if len(a:fgcolor) > 0
+    exec "highlight uuid".a:hlnum." ctermfg=".a:fgcolor." ctermbg=DarkGray guifg=".a:fgcolor." guibg=DarkGray"
+  endif
+endfunction
 
-" let g:matchadd_ids = {}
-" call SetHighlight(1, 'blue')
-" call SetHighlight(2, 'green')
-" call SetHighlight(3, 'red')
-" nnoremap <Leader>ma :<C-u>call DoHighlight(v:count1, expand("<cword>"))<CR>Gvk
-" nnoremap <Leader>md :<C-u>call UndoHighlight(v:count1)<CR>
+"map leader + [0-9] to a highlight called uuid[0-9] with a different color on dark gray background
+function! SetupUUIDHighlights()
+  let l:fgcolors = [ 'offbyone', 'Blue', 'DarkRed', 'LightGreen', 'LightGray', 'Cyan', 'Yellow', 'LightMagenta', 'White', 'Brown' ]
+  for n in range(1,9)
+    call SetHighlight(l:n, l:fgcolors[l:n])
+    exec "nnoremap <Leader>" . l:n . " :<C-u>call DoHighlight(". l:n . ', expand("<cWORD>"))<CR>'
+  endfor
+  nnoremap <Leader>` :<C-u>call clearmatches()<CR>
+endfunction
+" end of plugin content
+
+call SetupUUIDHighlights()
+" TODO:
+" instead of expand cWORD, make the search pattern 
+" nnoremap <Leader>1 :<C-u>call DoHighlight('1', expand("<cWORD>"))<CR>
