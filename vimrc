@@ -1,12 +1,11 @@
+" sets {{{
 syntax enable
-set nocompatible
 set encoding=utf-8
 scriptencoding utf-8
 set ambiwidth=single
 set mouse=nicr
 set autoread
 filetype plugin indent on
-set smartindent
 set t_Co=256
 set number
 set relativenumber
@@ -16,8 +15,8 @@ set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
 set cursorline
 set nocursorcolumn
 
-highlight cursorline   cterm=NONE ctermbg=black guibg=black
-highlight cursorcolumn cterm=NONE ctermbg=black guibg=black
+"highlight cursorline   cterm=NONE ctermbg=black guibg=black
+"highlight cursorcolumn cterm=NONE ctermbg=black guibg=black
 
 set showcmd                       " display incomplete commands
 set foldenable                    "auto folding enabled
@@ -58,66 +57,55 @@ set scrolloff=3                   " provide some context when editing
 
 set history=100
 
+set autoindent
+filetype plugin indent on
+" }}}
 " autocommands {{{
 if has("autocmd")
-  " In Makefiles, use real tabs, not tabs expanded to spaces
-  au FileType make setlocal noexpandtab
-
-  " Make sure all markdown files have the correct filetype set and setup wrapping
-  au BufRead,BufNewFile,BufWritePre *.{md,markdown,mkd,txt}
-        \ call SetupWrapping() |
-        \ colorscheme blackboard |
-        \ call s:lightline_update() |
-        \ call SetupUUIDHighlights()
-
-  " Treat JSON files like JavaScript
-  au BufNewFile,BufRead *.json set ft=json
+  augroup SetupTextEditingMode
+    autocmd!
+    au BufRead,BufNewFile,BufWritePre *.{md,markdown,mkd,txt}
+          \ colorscheme blackboard |
+          \ call SetupWrapping() |
+          \ call s:lightline_update() |
+          \ call SetupUUIDHighlights()
+  augroup END
 
   " make Python follow PEP8 ( http://www.python.org/dev/peps/pep-0008/ )
   au FileType python set softtabstop=4 tabstop=4 shiftwidth=4 textwidth=79
 
-  " Remember last location in file, but not for commit messages.
-  " see :help last-position-jump
-  au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal! g`\"" | endif
-
   "auto save views and folds
    autocmd BufWinLeave *.* mkview
    autocmd BufWinEnter *.* silent loadview
-
-   " set 80 width for perl
-   au FileType perl setlocal textwidth=80
-   au FileType perl setlocal cc=80
-
-   " augroup LightLineColorscheme
-   "   autocmd!
-   "   autocmd ColorScheme * call s:lightline_update()
-   " augroup end
  endif
 " }}}
 " GUI specific configurations {{{
 if has('gui_running')
-  hi Visual guifg=Gray guibg=Blue gui=none
+  highlight Visual guifg=Gray guibg=Blue gui=none
   set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
-  "hi Todo guifg=#40ffff guibg=#606060
-  "LIGHTLINE
 else
-  " something for console Vim only
+ " something for console Vim only
 endif
 "}}}
-
-
 let mapleader=","
-
+" macOS specific stuff {{{
 if has("macunix")
+  " open url in the default browser
+  function! OpenURI()
+    let l:uri = matchstr(getline("."), '\vhttps?:\/\/[^ >,;]+')
+    if l:uri != ""
+      echo "opening " . l:uri
+      exec ":silent! !open \"" . l:uri . "\""
+    else
+      echo "No URI found in line."
+    endif
+  endfun
+
   nnoremap <silent> <Leader>d :!open dict://<cword><CR><CR>
   nnoremap <silent> <Leader>m :!open wais://1/<cword><CR><CR>
-endif
-
-if $TMUX == ''
-  set clipboard+=unnamed
-endif
-
+  nnoremap <silent> <Leader>o :!open -R %<CR>
+  nnoremap <silent> <Leader>w :call OpenURI()<CR>
+endif " }}}
 " backups, swap and undo files {{{
 " Save your backups
 if isdirectory($HOME . '/.vim/backup') == 0
@@ -157,15 +145,15 @@ if exists("+undofile")
   set undofile
 endif
 "  }}}
-" remaps {{{ 
+" remaps {{{
 " clear the search buffer when hitting return
 nnoremap <CR> :nohlsearch<CR>
-nnoremap <leader>l :set list!<CR>
+nnoremap <Leader>l :set list!<CR>
 
-imap jk <ESC>
-imap jj <ESC>
-imap hh <ESC>
-imap kk <ESC>
+inoremap jk <ESC>
+inoremap jj <ESC>
+inoremap hh <ESC>
+inoremap kk <ESC>
 
 " magic search
 nnoremap / /\v
@@ -176,7 +164,7 @@ nnoremap n nzz
 nnoremap N Nzz
 
 " search the word selected in visual mode
-vnoremap / y/\v<C-R>"<CR>
+xnoremap / y/\v<C-R>"<CR>
 
 " toggle cursorline and column
 nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
@@ -198,7 +186,7 @@ nnoremap <S-Right> <C-w>L
 
 " }}}
 " functions {{{
-fun! SetupWrapping()
+function! SetupWrapping()
     set wrap
     set wrapmargin=2
     set textwidth=120
@@ -209,21 +197,7 @@ fun! SetupWrapping()
     syntax off
 endfun
 
-
-"TODO expand this,to linux friendly
-" open url with leader + w
-map <leader>w :call HandleURI()<CR>
-fun! HandleURI()
-let s:uri = matchstr(getline("."), '\vhttps?:\/\/[^ >,;]+')
-echo s:uri
-  if s:uri != ""
-    exec "!open \"" . s:uri . "\""
-    else
-      echo "No URI found in line."
-  endif
-endfun
-
-fun! StripTrailingWhitespaces()
+function! StripTrailingWhitespaces()
   "prep: save last search, save cursor position
   let _s=@/
   let l = line(".")
@@ -235,26 +209,8 @@ fun! StripTrailingWhitespaces()
   call cursor(l,c)
 endfun
 
-"open in finder
 
-fun! s:RevealInFinder()
-  if filereadable(expand("%"))
-    let l:command = "open -R %"
-  elseif getftype(expand("%:p:h")) == "dir"
-    let l:command = "open %:p:h"
-  else
-    let l:command = "open ."
-  endif
-
-  execute ":silent! !" . l:command
-
-  " For terminal Vim not to look messed up.
-  redraw!
-endfun
-
-command! Reveal call <SID>RevealInFinder()
-
-fun! s:lightline_update()
+function! s:lightline_update()
   if !exists('g:loaded_lightline')
     return
   endif
@@ -269,18 +225,6 @@ endfun
 if has("statusline") && !&cp
   set laststatus=2 
 endif
-
-let g:CommandTMaxHeight=10
-highlight StatusLine ctermfg=Blue ctermbg=White
-
-" highlight an out of range ip
-match errorMsg /\v(25[6-9]|2[6-9]\d|[3-9]\d\d)\.\d{1,3}[.]\d{1,3}[.]\d{1,3}|
-                 \\d{1,3}\.(25[6-9]|2[6-9]\d|[3-9]\d\d)[.]\d{1,3}[.]\d{1,3}|
-                 \\d{1,3}\.\d{1,3}\.(25[6-9]|2[6-9]\d|[3-9]\d\d)\.\d{1,3}|
-                 \\d{1,3}\.\d{1,3}\.\d{1,3}\.(25[6-9]|2[6-9]\d|[3-9]\d\d)/
-
-highlight NonText guifg=#4a4a59
-highlight SpecialKey guifg=#4a4a59
 
 cabbrev W!! w !sudo tee %
 " }}}
@@ -316,13 +260,14 @@ endfun
 " }}}
 " solarized config
 colorscheme solarized
-set background=dark
+set background=light
 
 " put this in a plugin {{{
 " Use getmatches() rather than dictionary (works in multiple windows).
 function! DoHighlight(hlnum, search_term)
   call UndoHighlight(a:hlnum)
   if len(a:search_term) > 0
+    echo "need to search for this: ".a:search_term
     let id = matchadd('uuid'.a:hlnum, a:search_term, -1)
   endif
 endfunction
@@ -348,16 +293,14 @@ endfunction
 
 "map leader + [0-9] to a highlight called uuid[0-9] with a different color on dark gray background
 function! SetupUUIDHighlights()
-  let l:fgcolors = [ 'offbyone', 'Blue', 'DarkRed', 'LightGreen', 'LightGray', 'Cyan', 'Yellow', 'LightMagenta', 'White', 'Brown' ]
+  let l:fgcolors = [ 'no', 'Blue', 'DarkRed', 'LightGreen', 'LightGray', 'Cyan', 'Yellow', 'LightMagenta', 'White', 'Brown' ]
   for n in range(1,9)
     call SetHighlight(l:n, l:fgcolors[l:n])
     exec "nnoremap <Leader>" . l:n . " :<C-u>call DoHighlight(". l:n . ', expand("<cWORD>"))<CR>'
+    " exec "nnoremap <Leader>" . l:n . ' :<C-u>call DoHighlight('.l:n. ', matchstr(getline("."), "\v\x{8}-\x{4}"))<CR>'
   endfor
   nnoremap <Leader>` :<C-u>call clearmatches()<CR>
 endfunction
 " end of plugin content
 
 call SetupUUIDHighlights()
-" TODO:
-" instead of expand cWORD, make the search pattern 
-" nnoremap <Leader>1 :<C-u>call DoHighlight('1', expand("<cWORD>"))<CR>
