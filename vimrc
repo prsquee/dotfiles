@@ -83,6 +83,8 @@ if has("autocmd")
 if has('gui_running')
   highlight Visual guifg=Gray guibg=Blue gui=none
   set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
+  " hide all scrollbars
+  set guioptions=
 else
  " something for console Vim only
 endif
