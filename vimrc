@@ -101,10 +101,10 @@ if has("macunix")
     endif
   endfun
 
-  nnoremap <silent> <Leader>d :!open dict://<cword><CR><CR>
-  nnoremap <silent> <Leader>m :!open wais://1/<cword><CR><CR>
-  nnoremap <silent> <Leader>o :!open -R %<CR>
-  nnoremap <silent> <Leader>w :call OpenURI()<CR>
+  nnoremap <silent> <leader>d :!open dict://<cword><CR><CR>
+  nnoremap <silent> <leader>m :!open wais://1/<cword><CR><CR>
+  nnoremap <silent> <leader>o :!open -R %<CR>
+  nnoremap <silent> <leader>w :call OpenURI()<CR>
 endif " }}}
 " backups, swap and undo files {{{
 " Save your backups
@@ -148,7 +148,7 @@ endif
 " remaps {{{
 " clear the search buffer when hitting return
 nnoremap <CR> :nohlsearch<CR>
-nnoremap <Leader>l :set list!<CR>
+nnoremap <leader>l :set list!<CR>
 
 inoremap jk <ESC>
 inoremap jj <ESC>
@@ -167,7 +167,7 @@ nnoremap N Nzz
 xnoremap / y/\v<C-R>"<CR>
 
 " toggle cursorline and column
-nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
+nnoremap <leader>c :set cursorline! cursorcolumn!<CR>
 
 " space for toggle folding
 nnoremap <Space> za
@@ -261,46 +261,3 @@ endfun
 " solarized config
 colorscheme solarized
 set background=light
-
-" put this in a plugin {{{
-" Use getmatches() rather than dictionary (works in multiple windows).
-function! DoHighlight(hlnum, search_term)
-  call UndoHighlight(a:hlnum)
-  if len(a:search_term) > 0
-    echo "need to search for this: ".a:search_term
-    let id = matchadd('uuid'.a:hlnum, a:search_term, -1)
-  endif
-endfunction
-
-function! UndoHighlight(hlnum)
-  silent! call matchdelete(GetId(a:hlnum))
-endfunction
-
-function! GetId(hlnum)
-  for m in getmatches()
-    if m['group'] == 'uuid'.a:hlnum
-      return m['id']
-    endif
-  endfor
-  return 0
-endfunction
-
-function! SetHighlight(hlnum, fgcolor)
-  if len(a:fgcolor) > 0
-    exec "highlight uuid".a:hlnum." ctermfg=".a:fgcolor." ctermbg=DarkGray guifg=".a:fgcolor." guibg=DarkGray"
-  endif
-endfunction
-
-"map leader + [0-9] to a highlight called uuid[0-9] with a different color on dark gray background
-function! SetupUUIDHighlights()
-  let l:fgcolors = [ 'no', 'Blue', 'DarkRed', 'LightGreen', 'LightGray', 'Cyan', 'Yellow', 'LightMagenta', 'White', 'Brown' ]
-  for n in range(1,9)
-    call SetHighlight(l:n, l:fgcolors[l:n])
-    exec "nnoremap <Leader>" . l:n . " :<C-u>call DoHighlight(". l:n . ', expand("<cWORD>"))<CR>'
-    " exec "nnoremap <Leader>" . l:n . ' :<C-u>call DoHighlight('.l:n. ', matchstr(getline("."), "\v\x{8}-\x{4}"))<CR>'
-  endfor
-  nnoremap <Leader>` :<C-u>call clearmatches()<CR>
-endfunction
-" end of plugin content
-
-call SetupUUIDHighlights()
