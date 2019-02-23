@@ -68,7 +68,7 @@ if has("autocmd")
           \ colorscheme blackboard |
           \ call SetupWrapping() |
           \ call s:lightline_update() |
-          \ call SetupUUIDHighlights()
+          \ call UUIDHighlightsInit()
   augroup END
 
   " make Python follow PEP8 ( http://www.python.org/dev/peps/pep-0008/ )
