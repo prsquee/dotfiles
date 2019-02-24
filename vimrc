@@ -59,6 +59,7 @@ set history=100
 
 set autoindent
 filetype plugin indent on
+set clipboard=unnamed
 " }}}
 " autocommands {{{
 if has("autocmd")
@@ -105,7 +106,8 @@ if has("macunix")
 
   nnoremap <silent> <leader>d :!open dict://<cword><CR><CR>
   nnoremap <silent> <leader>m :!open wais://1/<cword><CR><CR>
-  nnoremap <silent> <leader>o :!open -R %<CR>
+  nnoremap <silent> <leader>r :!open -R %<CR>
+  nnoremap <silent> <leader>o :!open %<CR>
   nnoremap <silent> <leader>w :call OpenURI()<CR>
 endif " }}}
 " backups, swap and undo files {{{
@@ -211,7 +213,6 @@ function! StripTrailingWhitespaces()
   call cursor(l,c)
 endfun
 
-
 function! s:lightline_update()
   if !exists('g:loaded_lightline')
     return
@@ -230,7 +231,7 @@ endif
 
 cabbrev W!! w !sudo tee %
 " }}}
-" plugin configurations {{{
+" plugins customizations {{{
 
 call pathogen#infect()
 call pathogen#helptags()
@@ -259,6 +260,11 @@ let g:lightline = {
 fun! LightlineBranchName()
   return gitbranch#name() == '' ? '' : 'ᚠ ' . gitbranch#name()
 endfun
+
+" uuid highlight with custom colors
+" let g:uuid_guibg = 'Green'
+" let g:uuid_ctermbg = 'White'
+" let g:uuid_fgcolors = [ 'Red', 'White', 'Blue', 'Green','Black','DarkGray']
 " }}}
 " solarized config
 colorscheme solarized
