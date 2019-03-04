@@ -82,12 +82,10 @@ if has("autocmd")
 " }}}
 " GUI specific configurations {{{
 if has('gui_running')
-  highlight Visual guifg=Gray guibg=Blue gui=none
   set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
+  set antialias
   " hide all scrollbars
   set guioptions=
-else
- " something for console Vim only
 endif
 "}}}
 let mapleader=","
@@ -109,6 +107,12 @@ if has("macunix")
   nnoremap <silent> <leader>r :!open -R %<CR>
   nnoremap <silent> <leader>o :!open %<CR>
   nnoremap <silent> <leader>w :call OpenURI()<CR>
+
+  if system("defaults read -g AppleInterfaceStyle") =~ '^Dark'
+    set background=dark
+  else
+    set background=light
+  endif
 endif " }}}
 " backups, swap and undo files {{{
 " Save your backups
@@ -226,7 +230,7 @@ endfun
 " misc {{{
 " always show the status bar
 if has("statusline") && !&cp
-  set laststatus=2 
+  set laststatus=2
 endif
 
 cabbrev W!! w !sudo tee %
@@ -266,6 +270,7 @@ endfun
 " let g:uuid_ctermbg = 'White'
 " let g:uuid_fgcolors = [ 'Red', 'White', 'Blue', 'Green','Black','DarkGray']
 " }}}
-" solarized config
+
+let macvim_skip_colorscheme=1
+let g:solarized_contrast = 'high'
 colorscheme solarized
-set background=light
