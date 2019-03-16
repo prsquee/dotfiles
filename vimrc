@@ -85,7 +85,7 @@ if has('gui_running')
   set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
   " hide all scrollbars and only show tabbar
   set antialias
-  set guioptions=showtabline
+  set guioptions=e
 endif
 "}}}
 let mapleader=","
