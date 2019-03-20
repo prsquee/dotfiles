@@ -69,7 +69,7 @@ if has("autocmd")
           \ colorscheme blackboard |
           \ call SetupWrapping() |
           \ call s:lightline_update() |
-          \ call UUIDHighlightsInit()
+          \ call MultipleHighlightsUpdate()
   augroup END
 
   " make Python follow PEP8 ( http://www.python.org/dev/peps/pep-0008/ )
@@ -265,7 +265,8 @@ fun! LightlineBranchName()
   return gitbranch#name() == '' ? '' : 'ᚠ ' . gitbranch#name()
 endfun
 
-" uuid highlight with custom colors
+" vim-multiple-highlights setup
+let g:mh_regex = '\v<\x{8}(-\x{4}){3}-\x{12}>'
 " let g:uuid_guibg = 'Green'
 " let g:uuid_ctermbg = 'White'
 " let g:uuid_fgcolors = [ 'Red', 'White', 'Blue', 'Green','Black','DarkGray']
