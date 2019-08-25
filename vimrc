@@ -11,7 +11,6 @@ set number
 set relativenumber
 set ruler
 set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
-
 set cursorline
 set nocursorcolumn
 
@@ -66,8 +65,8 @@ if has("autocmd")
   augroup SetupTextEditingMode
     autocmd!
     au BufRead,BufNewFile,BufWritePre *.{md,markdown,mkd,txt}
-          \ colorscheme blackboard |
-          \ call SetupWrapping() |
+          \ colorscheme blackboard    |
+          \ call SetupWrapping()      |
           \ call s:lightline_update() |
           \ call MultipleHighlightsUpdate()
   augroup END
@@ -80,17 +79,17 @@ if has("autocmd")
    autocmd BufWinEnter *.* silent loadview
  endif
 " }}}
-" GUI specific configurations {{{
-if has('gui_running')
-  set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
-  " hide all scrollbars and only show tabbar
-  set antialias
-  set guioptions=e
-endif
-"}}}
-let mapleader=","
 " macOS specific stuff {{{
 if has("macunix")
+  " GUI specific configurations {{{
+  if has('gui_running')
+    set guifont=MesloLGS\ NF:h14
+      " hide all scrollbars and only show tabbar
+    set antialias
+    set guioptions=e
+  endif
+  "}}}
+  let mapleader=","
   " open url in the default browser
   function! OpenURI()
     let l:uri = matchstr(getline("."), '\vhttps?:\/\/[^ >,;]+')
@@ -196,10 +195,10 @@ nnoremap <S-Right> <C-w>L
 " functions {{{
 function! SetupWrapping()
     set wrap
-    set wrapmargin=2
-    set textwidth=120
-    set nocursorline nocursorcolumn
+    set wrapmargin=0
+    set textwidth=0
     set linebreak
+    set nocursorline nocursorcolumn
     set nolist
     set nospell
     syntax off
