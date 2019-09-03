@@ -60,6 +60,7 @@ set history=100
 set autoindent
 filetype plugin indent on
 set clipboard=unnamed
+set background=dark
 " }}}
 " autocommands {{{
 if has("autocmd")
@@ -88,7 +89,6 @@ if has('gui_running')
   set guioptions=
 endif
 "}}}
-let mapleader=","
 " macOS specific stuff {{{
 if has("macunix")
   " open url in the default browser
@@ -113,6 +113,11 @@ if has("macunix")
   else
     set background=light
   endif
+else
+  function PBCopyToRemoteOSX() range
+    echo system('echo '.shellescape(join(getline(a:firstline, a:lastline), "\n")).'| pbcopy')
+  endfunction
+  vnoremap <S-y> :call PBCopyToRemoteOSX()<CR>
 endif " }}}
 " backups, swap and undo files {{{
 " Save your backups
@@ -154,6 +159,7 @@ if exists("+undofile")
 endif
 "  }}}
 " remaps {{{
+let mapleader=","
 " clear the search buffer when hitting return
 nnoremap <CR> :nohlsearch<CR>
 nnoremap <leader>l :set list!<CR>
@@ -273,4 +279,4 @@ endfun
 
 let macvim_skip_colorscheme=1
 let g:solarized_contrast = 'high'
-colorscheme solarized
+colorscheme blackboard
