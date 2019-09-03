@@ -115,7 +115,7 @@ if has("macunix")
   endif
 else
   function PBCopyToRemoteOSX() range
-    echo system('echo '.shellescape(join(getline(a:firstline, a:lastline), "\n")).'| pbcopy')
+    echo system('echo '.shellescape(join(getline(a:firstline, a:lastline), "\n")).'| pbcopy && echo "copied!"')
   endfunction
   vnoremap <S-y> :call PBCopyToRemoteOSX()<CR>
 endif " }}}
