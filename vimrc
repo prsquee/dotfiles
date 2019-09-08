@@ -117,7 +117,7 @@ else
   function PBCopyToRemoteOSX() range
     echo system('echo '.shellescape(join(getline(a:firstline, a:lastline), "\n")).'| pbcopy && echo "copied!"')
   endfunction
-  vnoremap <S-y> :call PBCopyToRemoteOSX()<CR>
+  vnoremap <silent> <S-y> :call PBCopyToRemoteOSX()<CR>
 endif " }}}
 " backups, swap and undo files {{{
 " Save your backups
