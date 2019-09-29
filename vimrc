@@ -180,8 +180,6 @@ nnoremap N Nzz
 " search the word selected in visual mode
 xnoremap / y/\v<C-R>"<CR>
 
-" toggle cursorline and column
-nnoremap <leader>c :set cursorline! cursorcolumn!<CR>
 
 " space for toggle folding
 nnoremap <Space> za
@@ -198,6 +196,7 @@ nnoremap <S-Up>    <C-w>K
 nnoremap <S-Left>  <C-w>H
 nnoremap <S-Right> <C-w>L
 
+nnoremap <leader>c gcc
 " }}}
 " functions {{{
 function! SetupWrapping()
