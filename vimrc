@@ -249,6 +249,7 @@ call pathogen#helptags()
 "trying pure unicode instead of powerline
 "
 set noshowmode  " remove -- INSER -- line below"
+"      \   'filename': expand("%")
 
 let g:lightline = {
       \ 'colorscheme': 'solarized',
@@ -257,8 +258,7 @@ let g:lightline = {
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
       \ },
       \ 'component': {
-      \   'readonly': '%{&readonly ? "✖︎" : ""}',
-      \   'filename': expand("%")
+      \   'readonly': '%{&readonly ? "✖︎" : ""}'
       \ },
       \ 'component_function': {
       \   'gitbranch': 'LightlineBranchName'
