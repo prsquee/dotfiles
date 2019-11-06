@@ -197,6 +197,8 @@ nnoremap <S-Left>  <C-w>H
 nnoremap <S-Right> <C-w>L
 
 nnoremap <leader>c gcc
+nnoremap <Leader><Leader> :update<CR>
+
 " }}}
 " functions {{{
 function! SetupWrapping()
