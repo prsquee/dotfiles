@@ -14,20 +14,16 @@ set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
 set cursorline
 set nocursorcolumn
 
-"highlight cursorline   cterm=NONE ctermbg=black guibg=black
-"highlight cursorcolumn cterm=NONE ctermbg=black guibg=black
-
 set showcmd                       " display incomplete commands
-set foldenable                    "auto folding enabled
+set foldenable                    " auto folding enabled
 set fdm=marker
 
 set hidden                        " Allow backgrounding buffers without writing them, and remember marks/undo for backgrounded buffers
-set showcmd
 
 "" Whitespace
 set nowrap                        " don't wrap lines
 set tabstop=2                     " a tab is two spaces
-set softtabstop=2                 "
+set softtabstop=2
 set shiftwidth=2                  " an autoindent (with <<) is two spaces
 set expandtab                     " use spaces, not tabs
 set list                          " Show invisible characters
@@ -60,29 +56,34 @@ set autoindent
 filetype plugin indent on
 set clipboard=unnamed
 set background=dark
+let mapleader=","
 " }}}
 " autocommands {{{
 if has("autocmd")
+  " Editing just texts or markdown {{{
   augroup SetupTextEditingMode
     autocmd!
-    au BufRead,BufNewFile,BufWritePre *.{md,markdown,mkd,txt}
-          \ colorscheme blackboard    |
-          \ call SetupWrapping()      |
-          \ call s:lightline_update() |
+    au BufReadPre,BufRead,BufNewFile,BufWritePre,FileReadPre *.{md,markdown,mkd,txt}
+          \ colorscheme solarized      |
+          \ call CheckDarkMode()       |
+          \ call SetupWrapping()       |
+          \ call PrepareSpelling()     |
+          \ call s:lightline_update()  |
           \ call MultipleHighlightsUpdate()
   augroup END
-
-  " make Python follow PEP8 ( http://www.python.org/dev/peps/pep-0008/ )
+  " }}}
+  " make Python follow PEP8 ( http://www.python.org/dev/peps/pep-0008/ ) {{{
   au FileType python set softtabstop=4 tabstop=4 shiftwidth=4 textwidth=79
-
-  "auto save views and folds
+  "}}}
+  "auto save views and folds {{{
    autocmd BufWinLeave *.* mkview
    autocmd BufWinEnter *.* silent loadview
+  "}}}
  endif
 " }}}
 " macOS specific stuff {{{
 if has("macunix")
-  " GUI specific configurations {{{
+  " Font settings {{{
   if has('gui_running')
     set guifont=MesloLGS\ NF:h14
       " hide all scrollbars and only show tabbar
@@ -90,7 +91,7 @@ if has("macunix")
     set guioptions=e
   endif
   "}}}
-  let mapleader=","
+  "
   " open url in the default browser
   function! OpenURI()
     let l:uri = matchstr(getline("."), '\vhttps?:\/\/[^ >,;]+')
@@ -102,22 +103,29 @@ if has("macunix")
     endif
   endfun
 
+  function! CheckDarkMode()
+    if system("defaults read -g AppleInterfaceStyle") =~ '^Dark'
+      set background=dark
+    else
+      set background=light
+    endif
+  endfun
+
+  " remaps for when working on macOS
   nnoremap <silent> <leader>d :!open dict://<cword><CR><CR>
   nnoremap <silent> <leader>m :!open wais://1/<cword><CR><CR>
   nnoremap <silent> <leader>r :!open -R %<CR>
   nnoremap <silent> <leader>o :!open %<CR>
   nnoremap <silent> <leader>w :call OpenURI()<CR>
 
-  if system("defaults read -g AppleInterfaceStyle") =~ '^Dark'
-    set background=dark
-  else
-    set background=light
-  endif
+  call CheckDarkMode()
 else
+  " running on a linux or bsd
   function PBCopyToRemoteOSX() range
     echo system('echo '.shellescape(join(getline(a:firstline, a:lastline), "\n")).'| pbcopy && echo "copied!"')
   endfunction
   vnoremap <silent> <S-y> :call PBCopyToRemoteOSX()<CR>
+
 endif " }}}
 " backups, swap and undo files {{{
 " Save your backups
@@ -159,7 +167,6 @@ if exists("+undofile")
 endif
 "  }}}
 " remaps {{{
-let mapleader=","
 " clear the search buffer when hitting return
 nnoremap <CR> :nohlsearch<CR>
 nnoremap <leader>l :set list!<CR>
@@ -197,8 +204,7 @@ nnoremap <S-Left>  <C-w>H
 nnoremap <S-Right> <C-w>L
 
 nnoremap <leader>c gcc
-nnoremap <Leader><Leader> :update<CR>
-
+nnoremap <silent> <leader><leader> :update<CR>
 " }}}
 " functions {{{
 function! SetupWrapping()
@@ -208,7 +214,6 @@ function! SetupWrapping()
     set linebreak
     set nocursorline nocursorcolumn
     set nolist
-    set nospell
     syntax off
 endfun
 
@@ -232,6 +237,19 @@ function! s:lightline_update()
     call lightline#colorscheme()
   catch
   endtry
+endfun
+
+function! PrepareSpelling()
+  setlocal spell spelllang=en_us,es_mx
+  setlocal complete+=kspell
+  syntax match noenclosedspell /"[^"]\+"/ contains=@NoSpell
+  syntax match noenclosedspell /'[^']\+'/ contains=@NoSpell
+  syntax match noenclosedspell /_[^']\+_/ contains=@NoSpell
+  syntax match noenclosedspell /([^)]\+)/ contains=@NoSpell
+  syntax match noenclosedspell /{[^']\+}/ contains=@NoSpell
+  syntax match noenclosedspell /\[[^']\+\]/ contains=@NoSpell
+  syntax match noenclosedspell /\*[^']\+\*/ contains=@NoSpell
+  syntax region codeRegion matchgroup=codes start=/\v^\W{2,}$/ end=/\v^\W{2,}$/ contains=@NoSpell
 endfun
 " }}}
 " misc {{{
@@ -281,4 +299,4 @@ let g:mh_regex = '\v<\x{8}(-\x{4}){3}-\x{12}>'
 
 let macvim_skip_colorscheme=1
 let g:solarized_contrast = 'high'
-colorscheme blackboard
+colorscheme solarized
