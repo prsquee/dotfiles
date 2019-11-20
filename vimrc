@@ -242,13 +242,14 @@ endfun
 function! PrepareSpelling()
   setlocal spell spelllang=en_us,es_mx
   setlocal complete+=kspell
-  syntax match noenclosedspell /"[^"]\+"/ contains=@NoSpell
-  syntax match noenclosedspell /'[^']\+'/ contains=@NoSpell
-  syntax match noenclosedspell /_[^']\+_/ contains=@NoSpell
-  syntax match noenclosedspell /([^)]\+)/ contains=@NoSpell
-  syntax match noenclosedspell /{[^']\+}/ contains=@NoSpell
-  syntax match noenclosedspell /\[[^']\+\]/ contains=@NoSpell
-  syntax match noenclosedspell /\*[^']\+\*/ contains=@NoSpell
+  syntax match dontspell /"[^"]\+"/ contains=@NoSpell
+  syntax match dontspell /'[^']\+'/ contains=@NoSpell
+  syntax match dontspell /_[^']\+_/ contains=@NoSpell
+  syntax match dontspell /([^)]\+)/ contains=@NoSpell
+  syntax match dontspell /{[^']\+}/ contains=@NoSpell
+  syntax match dontspell /\[[^']\+\]/ contains=@NoSpell
+  syntax match dontspell /\*[^']\+\*/ contains=@NoSpell
+  syntax match dontspell /\v^\s{2,4}\$\s.*$/ contains=@NoSpell
   syntax region codeRegion matchgroup=codes start=/\v^\W{2,}$/ end=/\v^\W{2,}$/ contains=@NoSpell
 endfun
 " }}}
