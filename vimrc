@@ -91,11 +91,23 @@ if has("macunix")
     set guioptions=e
   endif
   "}}}
-  "
+  " Open current case
+  function! OpenCase()
+    ":t gets the base name of the file and :r removes the extension
+    let l:sfdc = 'https://c.na7.visual.force.com/apex/Case_View?sbstr='
+    let l:casenumber = matchstr(expand('%:t:r'), '\v\d{8}')
+    if ! empty(l:casenumber)
+      exec ":silent! !open \"" . l:sfdc . l:casenumber . "\""
+    else
+      echo 'This is not a case file.'
+    endif
+  endfun
+
+
   " open url in the default browser
   function! OpenURI()
     let l:uri = matchstr(getline("."), '\vhttps?:\/\/[^ >,;]+')
-    if l:uri != ""
+    if ! empty(l:uri)
       echo "opening " . l:uri
       exec ":silent! !open \"" . l:uri . "\""
     else
@@ -117,6 +129,7 @@ if has("macunix")
   nnoremap <silent> <leader>r :!open -R %<CR>
   nnoremap <silent> <leader>o :!open %<CR>
   nnoremap <silent> <leader>w :call OpenURI()<CR>
+  nnoremap <silent> <leader>x :call OpenCase()<CR>
 
   call CheckDarkMode()
 else
