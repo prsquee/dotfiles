@@ -63,8 +63,8 @@ if has("autocmd")
   " Editing just texts or markdown {{{
   augroup SetupTextEditingMode
     autocmd!
-    au BufReadPre,BufRead,BufNewFile,BufWritePre,FileReadPre *.{md,markdown,mkd,txt}
-          \ colorscheme solarized      |
+    au BufReadPre,BufRead,BufNewFile,BufWritePre,FileReadPre *.txt
+          \ colorscheme solarized8_flat |
           \ call CheckDarkMode()       |
           \ call SetupWrapping()       |
           \ call PrepareSpelling()     |
@@ -255,15 +255,10 @@ endfun
 function! PrepareSpelling()
   setlocal spell spelllang=en_us,es_mx
   setlocal complete+=kspell
-  syntax match dontspell /"[^"]\+"/ contains=@NoSpell
-  syntax match dontspell /'[^']\+'/ contains=@NoSpell
-  syntax match dontspell /_[^']\+_/ contains=@NoSpell
-  syntax match dontspell /([^)]\+)/ contains=@NoSpell
-  syntax match dontspell /{[^']\+}/ contains=@NoSpell
-  syntax match dontspell /\[[^']\+\]/ contains=@NoSpell
-  syntax match dontspell /\*[^']\+\*/ contains=@NoSpell
-  syntax match dontspell /\v^\s{2,4}\$\s.*$/ contains=@NoSpell
-  syntax region codeRegion matchgroup=codes start=/\v^\W{2,}$/ end=/\v^\W{2,}$/ contains=@NoSpell
+  syntax match dontspell /\v(["'_*])[^\1]+\1/     contains=@NoSpell
+  syntax match dontspell /\v[\(\[][^\)\]]+[\)\]]/ contains=@NoSpell
+  syntax match dontspell /\v^\s{2,4}[$#]/         contains=@NoSpell
+  syntax region codeRegion matchgroup=codes start=/\v^[~#=-]{2,}$/ end=/\v^[~#=-]{2,}$/ contains=@NoSpell
 endfun
 " }}}
 " misc {{{
@@ -313,4 +308,4 @@ let g:mh_regex = '\v<\x{8}(-\x{4}){3}-\x{12}>'
 
 let macvim_skip_colorscheme=1
 let g:solarized_contrast = 'high'
-colorscheme solarized
+colorscheme solarized8
