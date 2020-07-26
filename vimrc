@@ -106,7 +106,7 @@ if has("macunix")
 
   " open url in the default browser
   function! OpenURI()
-    let l:uri = matchstr(getline("."), '\vhttps?:\/\/[^ >,;]+')
+    let l:uri = matchstr(getline("."), 'https\?:\/\/[^ >,;"]\+')
     if ! empty(l:uri)
       echo "opening " . l:uri
       exec ":silent! !open \"" . l:uri . "\""
@@ -290,7 +290,8 @@ let g:lightline = {
       \   'readonly': '%{&readonly ? "✖︎" : ""}'
       \ },
       \ 'component_function': {
-      \   'gitbranch': 'LightlineBranchName'
+      \   'gitbranch': 'LightlineBranchName',
+      \   'filename': 'RelativeFromHome'
       \ },
       \ 'separator': { 'left': '', 'right': '' },
       \ 'subseparator': { 'left': '❯', 'right': '❮' }
@@ -298,6 +299,11 @@ let g:lightline = {
 fun! LightlineBranchName()
   return gitbranch#name() == '' ? '' : 'ᚠ ' . gitbranch#name()
 endfun
+
+fun! RelativeFromHome()
+  return expand('%:~')
+endfun
+
 
 " vim-multiple-highlights setup
 let g:mh_regex = '\v<\x{8}(-\x{4}){3}-\x{12}>'
