@@ -94,7 +94,7 @@ if has("macunix")
   " Open current case
   function! OpenCase()
     ":t gets the base name of the file and :r removes the extension
-    let l:sfdc = 'https://c.na7.visual.force.com/apex/Case_View?sbstr='
+    let l:sfdc = 'https://gss--c.visualforce.com/apex/Case_View?sbstr=''
     let l:casenumber = matchstr(expand('%:t:r'), '\v\d{8}')
     if ! empty(l:casenumber)
       exec ":silent! !open \"" . l:sfdc . l:casenumber . "\""
@@ -218,6 +218,8 @@ nnoremap <S-Right> <C-w>L
 
 nnoremap <leader>c gcc
 nnoremap <silent> <leader><leader> :update<CR>
+
+nnoremap <S-y> y$
 " }}}
 " functions {{{
 function! SetupWrapping()
@@ -262,8 +264,8 @@ function! PrepareSpelling()
   syntax match dontspell /{[^']\+}/ contains=@NoSpell
   syntax match dontspell /\[[^']\+\]/ contains=@NoSpell
   syntax match dontspell /\*[^']\+\*/ contains=@NoSpell
-  syntax match dontspell /\v^\s{2,4}\$\s.*$/ contains=@NoSpell
-  syntax region codeRegion matchgroup=codes start=/\v^\W{2,}$/ end=/\v^\W{2,}$/ contains=@NoSpell
+  syntax match dontspell /\v^\s{2,}\$|#.*$/ contains=@NoSpell
+  syntax region codeRegion matchgroup=codes start=/\v^\W{3,}$/ end=/\v^\W{3,}$/ contains=@NoSpell
 endfun
 " }}}
 " misc {{{
