@@ -94,10 +94,20 @@ if has("macunix")
   " Open current case
   function! OpenCase()
     ":t gets the base name of the file and :r removes the extension
-    let l:sfdc = 'https://gss--c.visualforce.com/apex/Case_View?sbstr=''
+    let l:sfdc = 'https://gss--c.visualforce.com/apex/Case_View?sbstr='
     let l:casenumber = matchstr(expand('%:t:r'), '\v\d{8}')
     if ! empty(l:casenumber)
       exec ":silent! !open \"" . l:sfdc . l:casenumber . "\""
+    else
+      echo 'This is not a case file.'
+    endif
+  endfun
+  " ssh to current case
+  function! SSHCase()
+    let l:casenumber = matchstr(expand('%:t:r'), '\v\d{8}')
+    let l:alfred1 = "!osascript -e 'tell application \"Alfred 4\" to search \"ssh " . l:casenumber . "\"' -e 'tell application \"System Events\" to key code 36'"
+    if ! empty(l:casenumber)
+      exec l:alfred1
     else
       echo 'This is not a case file.'
     endif
@@ -264,7 +274,7 @@ function! PrepareSpelling()
   syntax match dontspell /{[^']\+}/ contains=@NoSpell
   syntax match dontspell /\[[^']\+\]/ contains=@NoSpell
   syntax match dontspell /\*[^']\+\*/ contains=@NoSpell
-  syntax match dontspell /\v^\s{2,}\$|#.*$/ contains=@NoSpell
+  syntax match dontspell /\v^\s{2,}[$#].*$/ contains=@NoSpell
   syntax region codeRegion matchgroup=codes start=/\v^\W{3,}$/ end=/\v^\W{3,}$/ contains=@NoSpell
 endfun
 " }}}
@@ -277,9 +287,6 @@ endif
 cabbrev W!! w !sudo tee %
 " }}}
 " plugins customizations {{{
-
-call pathogen#infect()
-call pathogen#helptags()
 
 "LIGHTLINE
 "trying pure unicode instead of powerline
